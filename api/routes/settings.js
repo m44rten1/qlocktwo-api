@@ -20,8 +20,7 @@ router.post('/', (req, res, next) => {
 
     console.log("r, g, b, brightness: " + r + ', ' + g + ', ' + b + ', ' + brightness);
 
-    console.log("Timezone los angeles: " + moment().tz("America/Los_Angeles").format());
-    console.log("Timezone los berline: " + moment().tz("Europe/Berline").format());
+    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
     const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
 
