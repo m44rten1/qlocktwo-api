@@ -3,17 +3,16 @@ const fs = require('fs');
 const router = express.Router();
 const spawn = require('child_process').spawn
 const moment = require('moment-timezone');
-const schedule = require('node-schedule');
 
 var r, g, b, brightness, color;
 
-var j = schedule.scheduleJob('5 * * * * *', function(){
+setInterval(function(){
     let date_ob = new Date();
     console.log("Seconds: " + date_ob.getSeconds());
     console.log("")
     console.log("")
     spawn('python3', ["./script.py", r, g, b, brightness])
-  });
+  }, 5000);
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
