@@ -17,6 +17,8 @@ router.post('/', (req, res, next) => {
     const b = parseInt(color.substr(5,2), 16).toString();
     const brightness = req.body.brightness.brightness;
 
+    console.log(r + ' ' + g + ' ' + b + ' ' + brightness);
+
     const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
