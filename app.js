@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const spawn = require('child_process').spawn
 
-const pythonProcess = spawn('python3', ["./script.py"])
+const pythonProcess = spawn('python3', ["./script.py", "100", "200", "150", "80"])
 
 const settingsRoutes = require('./api/routes/settings');
 

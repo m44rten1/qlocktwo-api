@@ -1,6 +1,13 @@
 import board
 import time
 import neopixel
+import sys
+
+r = int(sys.argv[1])
+g = int(sys.argv[2])
+b = int(sys.argv[3])
+brightness = float(sys.argv[4]) / 100.0
+
 pixels = neopixel.NeoPixel(board.D18, 2)
 
 # pixels[0] = (255, 0, 0)
@@ -13,19 +20,9 @@ num_pixels = 1
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
  
-pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=brightness, auto_write=False,
                            pixel_order=ORDER)
 
-while True:
-    pixels.fill((255, 0, 0))
-    pixels.show()
-    time.sleep(1)
-    
-    pixels.fill((0, 255, 0))
-    pixels.show()
-    time.sleep(1)
-    
-    pixels.fill((0, 0, 255))
-    pixels.show()
-    time.sleep(1)
+pixels.fill((r, g, b))
+pixels.show()
     
