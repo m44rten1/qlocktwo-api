@@ -3,6 +3,18 @@ const fs = require('fs');
 const router = express.Router();
 const spawn = require('child_process').spawn
 const moment = require('moment-timezone');
+const schedule = require('node-schedule');
+
+var r, g, b, brightness, color;
+
+var j = schedule.scheduleJob('5 * * * * *', function(){
+    let date_ob = new Date();
+    console.log("Seconds: " + date_ob.getSeconds());
+    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
+    console.log("")
+    console.log("")
+    spawn('python3', ["./script.py", r, g, b, brightness])
+  });
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
@@ -12,17 +24,15 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const color = req.body.color.color;
-    const r = parseInt(color.substr(1,2), 16).toString();
-    const g = parseInt(color.substr(3,2), 16).toString();
-    const b = parseInt(color.substr(5,2), 16).toString();
-    const brightness = req.body.brightness.brightness;
+    color = req.body.color.color;
+    r = parseInt(color.substr(1,2), 16).toString();
+    g = parseInt(color.substr(3,2), 16).toString();
+    b = parseInt(color.substr(5,2), 16).toString();
+    brightness = req.body.brightness.brightness;
 
     console.log("r, g, b, brightness: " + r + ', ' + g + ', ' + b + ', ' + brightness);
 
-    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
-
-    const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
+    spawn('python3', ["./script.py", r, g, b, brightness])
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
         if (err) throw err;
