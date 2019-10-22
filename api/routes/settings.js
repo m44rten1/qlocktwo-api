@@ -10,7 +10,6 @@ var r, g, b, brightness, color;
 var j = schedule.scheduleJob('5 * * * * *', function(){
     let date_ob = new Date();
     console.log("Seconds: " + date_ob.getSeconds());
-    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
     console.log("")
     console.log("")
     spawn('python3', ["./script.py", r, g, b, brightness])
@@ -29,6 +28,8 @@ router.post('/', (req, res, next) => {
     g = parseInt(color.substr(3,2), 16).toString();
     b = parseInt(color.substr(5,2), 16).toString();
     brightness = req.body.brightness.brightness;
+
+    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
     console.log("r, g, b, brightness: " + r + ', ' + g + ', ' + b + ', ' + brightness);
 
