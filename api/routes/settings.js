@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 const spawn = require('child_process').spawn
+const moment = require('moment-timezone');
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
@@ -17,7 +18,10 @@ router.post('/', (req, res, next) => {
     const b = parseInt(color.substr(5,2), 16).toString();
     const brightness = req.body.brightness.brightness;
 
-    console.log(r + ' ' + g + ' ' + b + ' ' + brightness);
+    console.log("r, g, b, brightness: " + r + ', ' + g + ', ' + b + ', ' + brightness);
+
+    console.log("Timezone los angeles: " + moment().tz("America/Los_Angeles").format());
+    console.log("Timezone los berline: " + moment().tz("Europe/Berline").format());
 
     const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
 
