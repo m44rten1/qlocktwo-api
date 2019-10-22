@@ -3,7 +3,9 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const spawn = require('child_process').spawn
 
+const pythonProcess = spawn('python3', ["script.py"])
 
 const settingsRoutes = require('./api/routes/settings');
 
