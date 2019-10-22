@@ -19,7 +19,7 @@ router.post('/', (req, res, next) => {
 
     console.log(r + ' ' + g + ' ' + b + ' ' + brightness);
 
-    const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
+    // const pythonProcess = spawn('python3', ["./script.py", r, g, b, brightness])
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
         if (err) throw err;
