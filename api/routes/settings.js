@@ -4,7 +4,7 @@ const router = express.Router();
 const spawn = require('child_process').spawn
 const moment = require('moment-timezone');
 
-var r, g, b, brightness, color;
+var r = 0, g = 0, b = 0, brightness = 0, color = "#000000";
 
 setInterval(function(){
     let date_ob = new Date();
