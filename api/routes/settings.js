@@ -44,6 +44,7 @@ router.post('/', (req, res, next) => {
     console.log("Brightness: "+ config.brightness);
     
     ws281x.reset();
+    ws281x = require('rpi-ws281x');
     ws281x.configure(config);
 
     pixels[0] = parseInt(color.substr(1,6), 16);
