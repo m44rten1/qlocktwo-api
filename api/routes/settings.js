@@ -39,10 +39,11 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
     color = req.body.color.color;
     console.log("Color: " + color);
+    console.log("Color int: " = parseInt(color.substring(1,6), 16));
     config.brightness = parseInt(req.body.brightness.brightness * 255.0 / 100.0);
     console.log("Brightness: "+ config.brightness);
     ws281x.configure(config);
-    
+
     pixels[0] = parseInt(color.substring(1,6), 16);
     console.log(pixels[0]);
 
