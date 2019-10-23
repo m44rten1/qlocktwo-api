@@ -47,8 +47,6 @@ router.post('/', (req, res, next) => {
 
     console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
-    console.log("r, g, b, brightness: " + r + ', ' + g + ', ' + b + ', ' + brightness);
-
     // spawn('python3', ["./script.py", r, g, b, brightness])
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
