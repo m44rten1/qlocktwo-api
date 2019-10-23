@@ -1,8 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const router = express.Router();
-// const spawn = require('child_process').spawn
 const ws281x = require('rpi-ws281x');
+const convert = require('color-convert');
 
 config = {};
 config.leds = 1;
@@ -41,23 +41,18 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    color = req.body.color.color;
-    console.log("Color: " + color);
-    console.log("Color int: " + parseInt(color.substr(1,6), 16));
-    config.brightness = parseInt(req.body.brightness.brightness * 255.0 / 100.0);
-    console.log("Brightness: "+ config.brightness);
-    
-    //ws281x.reset();
-    //ws281x.configure(config);
-
-    pixels[0] = parseInt(color.substr(1,6), 16);
-    console.log(pixels[0]);
+    color = convert.hex.lab(parseInt(req.body.color.color.substr(1, 6)));
+    console.log(color)
+    color[0] = parseInt(req.body.brightness.brightness);
+    console.log(color)
+    color = convert.lab.hex(color);
+    console.log(color)
+    pixels[0] = parseInt(color, 16);
+    console.log(pixels[0])
 
     ws281x.render(pixels);
 
     console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
-
-    // spawn('python3', ["./script.py", r, g, b, brightness])
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
         if (err) throw err;
