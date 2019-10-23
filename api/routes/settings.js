@@ -17,7 +17,7 @@ const tempSensor = mcpadc.open(5, {speedHz: 20000}, err => {
     }, 1000);
   });
 
-  const lightsensor = mcpadc.open(5, {speedHz: 20000}, err => {
+  const lightsensor = mcpadc.open(1, {speedHz: 20000}, err => {
     if (err) throw err;
    
     setInterval(_ => {
