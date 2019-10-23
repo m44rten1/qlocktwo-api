@@ -3,6 +3,19 @@ const fs = require('fs');
 const router = express.Router();
 const ws281x = require('rpi-ws281x');
 const convert = require('color-convert');
+const mcpadc = require('mcp-spi-adc');
+
+const tempSensor = mcpadc.open(5, {speedHz: 20000}, err => {
+    if (err) throw err;
+   
+    setInterval(_ => {
+      tempSensor.read((err, reading) => {
+        if (err) throw err;
+   
+        console.log((reading.value * 3.3 - 0.5) * 100);
+      });
+    }, 1000);
+  });
 
 config = {};
 config.leds = 1;
@@ -25,13 +38,17 @@ const moment = require('moment-timezone');
 
 var color = "#000000";
 
-// setInterval(function(){
-//     let date_ob = new Date();
-//     console.log("Seconds: " + date_ob.getSeconds());
-//     console.log("")
-//     console.log("")
-//     // spawn('python3', ["./script.py", r, g, b, brightness])
-//   }, 5000);
+setInterval(function(){
+    // let date_ob = new Date();
+    // console.log("Seconds: " + date_ob.getSeconds());
+    // console.log("")
+    // console.log("")
+    // spawn('python3', ["./script.py", r, g, b, brightness])
+
+
+
+
+  }, 5000);
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
