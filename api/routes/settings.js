@@ -21,13 +21,13 @@ const moment = require('moment-timezone');
 
 var color = "#000000";
 
-setInterval(function(){
-    let date_ob = new Date();
-    console.log("Seconds: " + date_ob.getSeconds());
-    console.log("")
-    console.log("")
-    // spawn('python3', ["./script.py", r, g, b, brightness])
-  }, 5000);
+// setInterval(function(){
+//     let date_ob = new Date();
+//     console.log("Seconds: " + date_ob.getSeconds());
+//     console.log("")
+//     console.log("")
+//     // spawn('python3', ["./script.py", r, g, b, brightness])
+//   }, 5000);
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
@@ -42,7 +42,7 @@ router.post('/', (req, res, next) => {
     console.log("Color int: " + parseInt(color.substr(1,6), 16));
     config.brightness = parseInt(req.body.brightness.brightness * 255.0 / 100.0);
     console.log("Brightness: "+ config.brightness);
-    ws281x.configure(config);
+    //ws281x.configure(config);
 
     pixels[0] = parseInt(color.substr(1,6), 16);
     console.log(pixels[0]);
