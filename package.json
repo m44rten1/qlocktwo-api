@@ -19,6 +19,7 @@
     "color-convert": "^2.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mcp-spi-adc": "^3.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "morgan": "^1.9.1",
