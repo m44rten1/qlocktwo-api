@@ -13,6 +13,8 @@ config.strip = 'grb';
 
 var pixels = new Uint32Array(config.leds);
 
+ws281x.render(pixels)
+
 
 
 
@@ -43,14 +45,13 @@ router.post('/', (req, res, next) => {
     config.brightness = parseInt(req.body.brightness.brightness * 255.0 / 100.0);
     console.log("Brightness: "+ config.brightness);
     
-    ws281x.reset();
-    ws281x = require('rpi-ws281x');
-    ws281x.configure(config);
+    //ws281x.reset();
+    //ws281x.configure(config);
 
     pixels[0] = parseInt(color.substr(1,6), 16);
     console.log(pixels[0]);
 
-    ws281x.render(pixels);
+    //ws281x.render(pixels);
 
     console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
