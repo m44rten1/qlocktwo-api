@@ -11,6 +11,8 @@ config.brightness = 255;
 config.gpio = 18;
 config.strip = 'grb';
 
+ws281x.configure(config);
+
 var pixels = new Uint32Array(config.leds);
 
 ws281x.render(pixels)
