@@ -5,29 +5,29 @@ const ws281x = require('rpi-ws281x');
 const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
-const tempSensor = mcpadc.open(5, {speedHz: 20000}, err => {
+const tempSensor = mcpadc.open(2, {speedHz: 20000}, err => {
     if (err) throw err;
    
     setInterval(_ => {
       tempSensor.read((err, reading) => {
         if (err) throw err;
    
-        console.log((reading.value * 3.3 - 0.5) * 100);
+        console.log("TEMP: " + (reading.value * 3.3 - 0.5) * 100);
       });
     }, 1000);
   });
 
-//   const lightsensor = mcpadc.open(1, {speedHz: 20000}, err => {
-//     if (err) throw err;
+  const lightsensor = mcpadc.open(3, {speedHz: 20000}, err => {
+    if (err) throw err;
    
-//     setInterval(_ => {
-//         lightsensor.read((err, reading) => {
-//         if (err) throw err;
+    setInterval(_ => {
+        lightsensor.read((err, reading) => {
+        if (err) throw err;
    
-//         console.log((reading.value * 3.3 - 0.5) * 100);
-//       });
-//     }, 1000);
-//   });
+        console.log("LED: " + (reading.value) * 100);
+      });
+    }, 1000);
+  });
 
 config = {};
 config.leds = 1;
