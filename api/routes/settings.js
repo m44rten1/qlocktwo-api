@@ -42,7 +42,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 
-    color = convert.hex.lab(req.body.color.color.substr(1, 6));
+    color = convert.hex.lab.raw(req.body.color.color.substr(1, 6));
     console.log(color)
     color[0] = parseInt(req.body.brightness.brightness);
     console.log(color)
