@@ -19,7 +19,7 @@ var pixels = new Uint32Array(config.leds);
 
 const moment = require('moment-timezone');
 
-var brightness = 0, color = "#000000";
+var color = "#000000";
 
 setInterval(function(){
     let date_ob = new Date();
@@ -38,10 +38,11 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     color = req.body.color.color;
-    config.brightness = req.body.brightness.brightness;
+    config.brightness = parseInt(req.body.brightness.brightness * 255.0 / 100.0);
     ws281x.configure(config);
 
     pixels[0] = parseInt(color.substring(1,6), 16);
+    console.log(pixels[0]);
 
     ws281x.render(pixels);
 
