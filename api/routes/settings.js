@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
     pixels[0] = parseInt(color.substr(1,6), 16);
     console.log(pixels[0]);
 
-    //ws281x.render(pixels);
+    ws281x.render(pixels);
 
     console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
