@@ -4,8 +4,8 @@ const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
 
-tempFilter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-brightnessFilter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+tempFilter = new Array(40).fill(0);
+brightnessFilter = new Array(40).fill(0);
 
 const clock = {
   pixels: null,
@@ -36,7 +36,7 @@ const clock = {
           tempFilter.push((reading.value * 5 - 0.5) * 100);
           this.temperature = average(tempFilter);
         });
-      }, 1000);
+      }, 100);
     });
 
     const lightsensor = mcpadc.open(3, { speedHz: 20000 }, err => {
@@ -50,7 +50,7 @@ const clock = {
           brightnessFilter.push(reading.value * 100);
           this.brightness = average(brightnessFilter);
         });
-      }, 1000);
+      }, 100);
     });
   },
   render: function() {
