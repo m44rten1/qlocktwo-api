@@ -5,6 +5,20 @@ const ws281x = require('rpi-ws281x');
 const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
+var value = 0;
+const test = mcpadc.open(3, {speedHz: 20000}, err => {
+  if (err) throw err;
+ 
+  test.read((err, reading) => {
+      if (err) throw err;
+      value = reading.value;
+  });
+});
+
+
+console.log("TEST: " + value);
+
+
 const tempSensor = mcpadc.open(2, {speedHz: 20000}, err => {
     if (err) throw err;
    
@@ -56,9 +70,6 @@ setInterval(function(){
     // console.log("")
     // console.log("")
     // spawn('python3', ["./script.py", r, g, b, brightness])
-
-
-
 
   }, 5000);
 
