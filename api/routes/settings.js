@@ -42,7 +42,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 
-    global.clock.render();
+    
 
     // color = convert.hex.lab.raw(req.body.color.color.substr(1, 6));
     // color[0] = parseInt(req.body.brightness.brightness);
@@ -60,6 +60,7 @@ router.post('/', (req, res, next) => {
         let settings = JSON.parse(rawdata);
 
         res.status(200).json(settings)
+        global.clock.render();
     });
 });
 
