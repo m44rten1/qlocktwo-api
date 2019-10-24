@@ -14,9 +14,9 @@ const clock = {
     this.config.strip = "grb";
     this.config.leds = 1;
 
-    ws281x.configure(config);
+    ws281x.configure(this.config);
 
-    this.pixels = new Uint32Array(config.leds);
+    this.pixels = new Uint32Array(this.config.leds);
   },
   measurements: function() {
     const tempSensor = mcpadc.open(2, { speedHz: 20000 }, err => {
