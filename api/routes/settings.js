@@ -5,7 +5,7 @@ const ws281x = require('rpi-ws281x');
 const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
-var value = 0;
+var value = -10;
 const test = mcpadc.open(3, {speedHz: 20000}, err => {
   if (err) throw err;
  
