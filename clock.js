@@ -38,7 +38,7 @@ const clock = {
     this.pixels = new Uint32Array(this.config.leds);
   },
   init() {
-    this.initLed();
+    //this.initLed();
     this.initLeds();
     this.measurements();
   },
