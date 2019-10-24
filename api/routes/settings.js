@@ -6,23 +6,23 @@ const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
 
-config = {};
-config.leds = 1;
-config.dma = 10;
-config.brightness = 255;
-config.gpio = 18;
-config.strip = 'grb';
+// config = {};
+// config.leds = 1;
+// config.dma = 10;
+// config.brightness = 255;
+// config.gpio = 18;
+// config.strip = 'grb';
 
-ws281x.configure(config);
+// ws281x.configure(config);
 
-var pixels = new Uint32Array(config.leds);
+// var pixels = new Uint32Array(config.leds);
 
-ws281x.render(pixels)
+// ws281x.render(pixels)
 
 
-const moment = require('moment-timezone');
+// const moment = require('moment-timezone');
 
-var color = "#000000";
+// var color = "#000000";
 
 setInterval(function(){
     // let date_ob = new Date();
