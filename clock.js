@@ -18,7 +18,7 @@ const clock = {
   initLed() {
     this.config_1.dma = 10;
     this.config_1.brightness = 255;
-    this.config_1.gpio = 22;
+    this.config_1.gpio = 21;
     this.config_1.strip = "grb";
     this.config_1.leds = 1;
 
