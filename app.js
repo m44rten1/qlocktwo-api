@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const settingsRoutes = require('./api/routes/settings');
 const measurementsRoutes = require('./api/routes/measurements');
-const clock = require('clock');
+const clock = require('./clock');
 
 clock.measurements();
 
