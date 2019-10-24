@@ -42,18 +42,16 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 
-    color = convert.hex.lab.raw(req.body.color.color.substr(1, 6));
-    console.log(color)
-    color[0] = parseInt(req.body.brightness.brightness);
-    console.log(color)
-    color = convert.lab.hex(color);
-    console.log(color)
-    pixels[0] = parseInt(color, 16);
-    console.log(pixels[0])
+    global.clock.render();
 
-    ws281x.render(pixels);
+    // color = convert.hex.lab.raw(req.body.color.color.substr(1, 6));
+    // color[0] = parseInt(req.body.brightness.brightness);
+    // color = convert.lab.hex(color);
+    // pixels[0] = parseInt(color, 16);
 
-    console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
+    // ws281x.render(pixels);
+
+    // console.log(req.body.time.timezone.text + ": " + moment().tz(req.body.time.timezone.utc[0]).format());
 
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
         if (err) throw err;
