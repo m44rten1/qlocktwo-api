@@ -36,7 +36,7 @@ const clock = {
           tempFilter.push((reading.value * 5 - 0.5) * 100);
           this.temperature = average(tempFilter);
         });
-      }, 100);
+      }, 200);
     });
 
     const lightsensor = mcpadc.open(3, { speedHz: 20000 }, err => {
@@ -50,7 +50,7 @@ const clock = {
           brightnessFilter.push(reading.value * 100);
           this.brightness = average(brightnessFilter);
         });
-      }, 100);
+      }, 200);
     });
   },
   render: function() {
