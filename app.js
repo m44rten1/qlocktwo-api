@@ -7,6 +7,8 @@ const cors = require('cors')
 const settingsRoutes = require('./api/routes/settings');
 const measurementsRoutes = require('./api/routes/measurements');
 
+const testString = "Dit is een testString";
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));

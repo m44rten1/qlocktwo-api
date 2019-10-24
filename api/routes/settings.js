@@ -17,7 +17,7 @@ const sensor = mcpadc.open(4, {}, err => {
   });
 });
 
-console.log("test VALUE: " + value);
+console.log(testString);
 
 
 
