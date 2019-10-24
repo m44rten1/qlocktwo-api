@@ -7,7 +7,7 @@ const mcpadc = require('mcp-spi-adc');
 
 var value = -10;
 
-const sensor = mcpadc.open(channelNumber, {}, err => {
+const sensor = mcpadc.open(4, {}, err => {
   sensor.read((err, reading) => {
     console.log('  ch' + ': ' +
       reading.rawValue + ' / ' + reading.value);
