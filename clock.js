@@ -50,7 +50,7 @@ const clock = {
 
     // Check what to show
     this.pixels[0] = getColor(settings);
-    ws281x.render(pixels);
+    ws281x.render(this.pixels);
 
     console.log(
       settings.time.timezone.text +
