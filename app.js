@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const settingsRoutes = require('./api/routes/settings');
+const measurementsRoutes = require('./api/routes/measurements');
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 
 app.use('/settings', settingsRoutes);
+app.use('/measurements', measurementsRoutes);
 
 // Error handling
 app.use((req, res, next) => {
