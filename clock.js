@@ -4,8 +4,8 @@ const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
 
-tempFilter = new Array(40).fill(0);
-brightnessFilter = new Array(40).fill(0);
+tempFilter = new Array(150).fill(0);
+brightnessFilter = new Array(150).fill(0);
 
 const clock = {
   pixels: null,
