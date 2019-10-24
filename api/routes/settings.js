@@ -6,14 +6,22 @@ const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
 var value = -10;
-const test = mcpadc.open(3, {speedHz: 20000}, err => {
-  if (err) throw err;
- 
-  test.read((err, reading) => {
-      if (err) throw err;
+
+const sensor = mcpadc.open(channelNumber, {}, err => {
+  assert(!err, 'can\'t open sensor');
+  sensor.read((err, reading) => {
+    assert(!err, 'can\'t read sensor');
+    console.log('  ch' + ': ' +
+      reading.rawValue + ' / ' + reading.value);
       value = reading.value;
+    sensor.close(err => {
+      assert(!err, 'can\'t close sensor');
+    });
   });
 });
+
+console.log("test VALUE: " + value);
+
 
 
 console.log("TEST: " + value);
