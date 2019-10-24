@@ -4,9 +4,14 @@ const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
 
+tempFilter = [0, 0, 0, 0, 0, 0, 0];
+brightnessFilter = [0, 0, 0, 0, 0, 0, 0];
+
 const clock = {
   pixels: null,
   config: {},
+  brightness: 0,
+  temperature: 0,
   init: function() {
     this.config.dma = 10;
     this.config.brightness = 255;
@@ -17,6 +22,8 @@ const clock = {
     ws281x.configure(this.config);
 
     this.pixels = new Uint32Array(this.config.leds);
+
+    this.measurements();
   },
   measurements: function() {
     const tempSensor = mcpadc.open(2, { speedHz: 20000 }, err => {
@@ -25,8 +32,9 @@ const clock = {
       setInterval(_ => {
         tempSensor.read((err, reading) => {
           if (err) throw err;
-
-          global.temperature = (reading.value * 3.3 - 0.5) * 100;
+          tempFilter.shift();
+          tempFilter.push((reading.value * 3.3 - 0.5) * 100);
+          this.temperature = average(tempFilter);
         });
       }, 1000);
     });
@@ -37,8 +45,10 @@ const clock = {
       setInterval(_ => {
         lightsensor.read((err, reading) => {
           if (err) throw err;
-
-          global.brightness = reading.value * 100;
+            
+          brightnessFilter.shift();
+          brightnessFilter.push(reading.value * 100);
+          this.brightness = average(tempFilter);
         });
       }, 1000);
     });
@@ -66,5 +76,14 @@ var getColor = function(settings) {
   color = convert.lab.hex(color);
   return parseInt(color, 16);
 };
+
+var average = function(arr) {
+    sum = 0;
+    arr.forEach(element => {
+        sum += element;
+    }); 
+
+    return sum / arr.length;
+}
 
 module.exports = clock;

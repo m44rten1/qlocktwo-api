@@ -8,7 +8,6 @@ const measurementsRoutes = require('./api/routes/measurements');
 
 global.clock = require('./clock');
 global.clock.init();
-global.clock.measurements();
 
 app.use(cors());
 app.use(morgan('dev'));
