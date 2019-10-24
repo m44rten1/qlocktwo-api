@@ -2,12 +2,7 @@ const ws281x = require("rpi-ws281x");
 const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 
-const clock = {
-  measurements: {
-    brightness: null,
-    temperature: null
-  }
-};
+const clock = {};
 
 clock.measurements = function() {
   const tempSensor = mcpadc.open(2, { speedHz: 20000 }, err => {
