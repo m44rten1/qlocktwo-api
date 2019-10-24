@@ -8,14 +8,11 @@ const mcpadc = require('mcp-spi-adc');
 var value = -10;
 
 const sensor = mcpadc.open(channelNumber, {}, err => {
-  assert(!err, 'can\'t open sensor');
   sensor.read((err, reading) => {
-    assert(!err, 'can\'t read sensor');
     console.log('  ch' + ': ' +
       reading.rawValue + ' / ' + reading.value);
       value = reading.value;
     sensor.close(err => {
-      assert(!err, 'can\'t close sensor');
     });
   });
 });
