@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
-const testString = "Dit is een testString";
+global.testString = "Dit is een testString";
 
 const settingsRoutes = require('./api/routes/settings');
 const measurementsRoutes = require('./api/routes/measurements');
