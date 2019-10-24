@@ -3,7 +3,7 @@ const fs = require('fs');
 const router = express.Router();
 
 router.get('/temperature', (req, res, next) => {
-    res.status(200).json({data: 12.456})
+    res.status(200).json(12.456)
 });
 
 
