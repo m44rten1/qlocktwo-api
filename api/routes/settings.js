@@ -5,48 +5,53 @@ const ws281x = require('rpi-ws281x');
 const convert = require('color-convert');
 const mcpadc = require('mcp-spi-adc');
 
-var value = -10;
-
-const sensor = mcpadc.open(4, {}, err => {
-  sensor.read((err, reading) => {
-    console.log('  ch' + ': ' +
-      reading.rawValue + ' / ' + reading.value);
-      value = reading.value;
-    sensor.close(err => {
-    });
-  });
-});
-
-console.log(testString);
 
 
+// const sensor = mcpadc.open(4, {}, err => {
+//   sensor.read((err, reading) => {
+//     console.log('  ch' + ': ' +
+//       reading.rawValue + ' / ' + reading.value);
+//       value = reading.value;
+//     sensor.close(err => {
+//     });
+//   });
+// });
 
-console.log("TEST: " + value);
+// console.log(testString);
 
 
-const tempSensor = mcpadc.open(2, {speedHz: 20000}, err => {
-    if (err) throw err;
+
+// console.log("TEST: " + value);
+
+
+// const tempSensor = mcpadc.open(2, {speedHz: 20000}, err => {
+//     if (err) throw err;
    
-    setInterval(_ => {
-      tempSensor.read((err, reading) => {
-        if (err) throw err;
+//     setInterval(_ => {
+//       tempSensor.read((err, reading) => {
+//         if (err) throw err;
    
-        console.log("TEMP: " + (reading.value * 3.3 - 0.5) * 100);
-      });
-    }, 1000);
-  });
+//         console.log("TEMP: " + (reading.value * 3.3 - 0.5) * 100);
+//       });
+//     }, 1000);
+//   });
 
-  const lightsensor = mcpadc.open(3, {speedHz: 20000}, err => {
-    if (err) throw err;
+//   const lightsensor = mcpadc.open(3, {speedHz: 20000}, err => {
+//     if (err) throw err;
    
-    setInterval(_ => {
-        lightsensor.read((err, reading) => {
-        if (err) throw err;
+//     setInterval(_ => {
+//         lightsensor.read((err, reading) => {
+//         if (err) throw err;
    
-        console.log("LED: " + (reading.value) * 100);
-      });
-    }, 1000);
-  });
+//         console.log("LED: " + (reading.value) * 100);
+//       });
+//     }, 1000);
+//   });
+
+setInterval( _ => {
+  console.log("Temp: "+ global.temperature)
+  console.log("brightness: "+ global.brightness)
+}, 1000)
 
 config = {};
 config.leds = 1;

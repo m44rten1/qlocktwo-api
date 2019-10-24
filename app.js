@@ -3,13 +3,11 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser')
 const cors = require('cors')
-
-global.testString = "Dit is een testString";
-
 const settingsRoutes = require('./api/routes/settings');
 const measurementsRoutes = require('./api/routes/measurements');
+const clock = require('clock');
 
-
+clock.measurements();
 
 app.use(cors());
 app.use(morgan('dev'));
