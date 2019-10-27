@@ -114,8 +114,8 @@ const clock = {
   },
   timeToArray(hours, minutes, color) {
     // Clear pixels
-    this.pixels.forEach(pixel => {
-      pixel = 0;
+    this.pixels.forEach((pixel, index) => {
+      this.pixels[index] = 0;
     });
 
     var roundedMinutes = parseInt(minutes / 5) * 5;
