@@ -106,7 +106,7 @@ const clock = {
       "Hour:minutes   " + hour + ":" + minutes
     );
 
-    this.timeToArray(18, 6, getColor(settings));
+    this.timeToArray(22, 24, getColor(settings));
     ws281x.render(this.pixels);
 
   },
