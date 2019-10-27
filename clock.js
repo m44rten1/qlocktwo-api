@@ -99,8 +99,8 @@ const clock = {
     ws281x.render(this.pixels);
 
 
-    var minutes = moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2);
-    var hour = moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2);
+    var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
+    var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
 
     console.log(
       "Hour:minutes   " + hour + ":" + minutes
