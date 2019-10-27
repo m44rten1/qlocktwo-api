@@ -95,7 +95,8 @@ const clock = {
     let settings = JSON.parse(rawdata);
 
     // Check what to show
-    this.pixels[0] = getColor(settings);
+    //this.pixels[0] = getColor(settings);
+    this.timeToArray(0, 0, getColor(settings))
     ws281x.render(this.pixels);
 
 
@@ -106,6 +107,19 @@ const clock = {
       "Hour:minutes   " + hour + ":" + minutes
     );
   },
+  timeToArray(hours, minutes, color) {
+    // Clear pixels
+    this.pixels.forEach(pixel => {
+      pixel = 0;
+    });
+
+    var concatArray = [...this.ledArrayInterface.hours[0], ...this.ledArrayInterface.words.esIst];
+
+    // Set pixels
+    this.concatArray.forEach( element => {
+      this.pixels[element] = color;
+    })
+  }
 
 };
 
