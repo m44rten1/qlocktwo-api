@@ -116,7 +116,7 @@ const clock = {
     var concatArray = [...this.ledArrayInterface.hours[0], ...this.ledArrayInterface.words.esIst];
 
     // Set pixels
-    this.concatArray.forEach( element => {
+    concatArray.forEach( element => {
       this.pixels[element] = color;
     })
   }
