@@ -98,10 +98,12 @@ const clock = {
     this.pixels[0] = getColor(settings);
     ws281x.render(this.pixels);
 
+
+    var minutes = moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2);
+    var hour = moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2);
+
     console.log(
-      settings.time.timezone.text +
-        ": " +
-        moment().tz(settings.time.timezone.utc[0]).format()
+      "Hour:minutes   " + hour + ":" + minutes
     );
   },
 
