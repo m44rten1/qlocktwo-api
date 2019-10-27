@@ -12,33 +12,52 @@ const clock = {
   pixels: null,
   pixel: null,  // Lonley LED
   config: {},
-  config_1: {},
   brightness: 0,
   temperature: 0,
-  initLed() {
-    this.config_1.dma = 10;
-    this.config_1.brightness = 255;
-    this.config_1.gpio = 21;
-    this.config_1.strip = "grb";
-    this.config_1.leds = 1;
+  ledArrayInterface: {
+    hours: [
+      [63, 80, 83, 100, 104],  // ZWOELF, NULL
+      [5, 17, 26, 37],  // EINS
+      [77, 86, 97, 107],  // ZWEI
+      [4, 18, 25, 38],  // DREI
+      [78, 85, 98, 106],  // VIER
+      [76, 87, 96, 108],  // FUENF
+      [3, 19, 24, 39, 44],  // SECHS
+      [2, 20, 23, 40, 43, 60],  // SIEBEN
+      [79, 84, 99, 105],  // ACHT
+      [41, 42, 61, 62],  // NEUN
+      [1, 21, 22, 41],  // ZEHN
+      [56, 67, 76],  // ELF
 
-    ws281x_1.configure(this.config_1);
+    ],
+    words: {
+      esIst: [10, 12, 32, 51, 52],
+      ein: [5, 17, 26],
+      drei: [8, 14, 29, 34],
+      fuenf: [72, 91, 92, 112],
+      zehn: [9, 13, 30, 33],
+      viertel: [49, 54, 69, 74, 89, 94, 110],
+      zwanzig: [50, 53, 70, 73, 90, 93, 111],
+      halb: [6, 16, 27, 36],
+      vor: [7, 15, 28],
+      nach: [75, 88, 95, 109],
+      Uhr: [82, 101, 103],
 
-    this.pixel = new Uint32Array(this.config_1.leds);
+    }
   },
+  
   initLeds() {
     this.config.dma = 10;
     this.config.brightness = 255;
     this.config.gpio = 18;
     this.config.strip = "grb";
-    this.config.leds = 1;
+    this.config.leds = 114;
 
     ws281x.configure(this.config);
 
     this.pixels = new Uint32Array(this.config.leds);
   },
   init() {
-    //this.initLed();
     this.initLeds();
     this.measurements();
   },
@@ -82,9 +101,10 @@ const clock = {
     console.log(
       settings.time.timezone.text +
         ": " +
-        moment().tz(settings.time.timezone.utc[0])//.format()
+        moment().tz(settings.time.timezone.utc[0]).format()
     );
-  }
+  },
+
 };
 
 var getColor = function(settings) {
