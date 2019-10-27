@@ -102,11 +102,13 @@ const clock = {
     var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
     var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
 
+    minutes = parseInt(Math.random() * 60);
+    hour = parseInt(Math.random() * 24);
     console.log(
       "Hour:minutes   " + hour + ":" + minutes
     );
 
-    this.timeToArray(22, 24, getColor(settings));
+    this.timeToArray( hour, minutes, getColor(settings));
     ws281x.render(this.pixels);
 
   },
