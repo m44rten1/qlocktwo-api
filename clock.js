@@ -41,7 +41,7 @@ const clock = {
       halb: [6, 16, 27, 36],
       vor: [7, 15, 28],
       nach: [75, 88, 95, 109],
-      Uhr: [82, 101, 103],
+      uhr: [82, 101, 103],
 
     }
   },
@@ -96,8 +96,7 @@ const clock = {
 
     // Check what to show
     //this.pixels[0] = getColor(settings);
-    this.timeToArray(0, 0, getColor(settings))
-    ws281x.render(this.pixels);
+    
 
 
     var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
@@ -106,6 +105,10 @@ const clock = {
     console.log(
       "Hour:minutes   " + hour + ":" + minutes
     );
+
+    this.timeToArray(hour, minutes, getColor(settings));
+    ws281x.render(this.pixels);
+
   },
   timeToArray(hours, minutes, color) {
     // Clear pixels
@@ -113,7 +116,143 @@ const clock = {
       pixel = 0;
     });
 
-    var concatArray = [...this.ledArrayInterface.hours[0], ...this.ledArrayInterface.words.esIst];
+    var roundedMinutes = parseInt(minutes / 5) * 5;
+    var roundedHours = hours % 12;
+    var concatArray = [];
+
+    switch(roundedMinutes) {
+      // 12 o'clock
+      case 0:
+        if (roundedHours == 1) {
+          concatArray = [
+            ...this.ledArrayInterface.words.esIst, 
+            ...this.ledArrayInterface.words.ein, 
+            ...this.ledArrayInterface.words.uhr
+          ];
+        } else {
+          concatArray = [
+            ...this.ledArrayInterface.words.esIst, 
+            ...this.ledArrayInterface.hours[roundedHours], 
+            ...this.ledArrayInterface.words.uhr
+          ];
+        }
+          
+        break;
+      case 5:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.fuenf,
+          ...this.ledArrayInterface.words.nach,  
+          ...this.ledArrayInterface.hours[roundedHours] 
+        ];
+        break;
+      case 10:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.zehn,
+          ...this.ledArrayInterface.words.nach,  
+          ...this.ledArrayInterface.hours[roundedHours] 
+        ];
+        break;
+      case 15:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.viertel,
+          ...this.ledArrayInterface.words.nach,  
+          ...this.ledArrayInterface.hours[roundedHours] 
+        ];
+        break;
+      case 20:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.zwanzig,
+          ...this.ledArrayInterface.words.nach,  
+          ...this.ledArrayInterface.hours[roundedHours] 
+        ];
+        break;
+      case 25:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.fuenf,
+          ...this.ledArrayInterface.words.vor,
+          ...this.ledArrayInterface.words.halb,  
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 30:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst, 
+          ...this.ledArrayInterface.words.halb,  
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 35:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst,
+          ...this.ledArrayInterface.words.fuenf,
+          ...this.ledArrayInterface.words.nach,
+          ...this.ledArrayInterface.words.halb,  
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 40:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst,
+          ...this.ledArrayInterface.words.zwanzig,
+          ...this.ledArrayInterface.words.vor, 
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 45:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst,
+          ...this.ledArrayInterface.words.viertel,
+          ...this.ledArrayInterface.words.vor, 
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 50:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst,
+          ...this.ledArrayInterface.words.zehn,
+          ...this.ledArrayInterface.words.vor, 
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+      case 55:
+        concatArray = [
+          ...this.ledArrayInterface.words.esIst,
+          ...this.ledArrayInterface.words.fuenf,
+          ...this.ledArrayInterface.words.vor, 
+          ...this.ledArrayInterface.hours[(roundedHours + 1) % 12] 
+        ];
+        break;
+    }
+
+    var restMinutes = minutes % 5;
+
+    switch(restMinutes) {
+      case 0:
+        break;
+      case 1:
+        this.pixels[11] = color;
+        break;
+      case 2:
+        this.pixels[11] = color;
+        this.pixels[113] = color;
+        break;
+      case 3:
+        this.pixels[11] = color;
+        this.pixels[113] = color;
+        this.pixels[102] = color;
+        break;
+      case 4:
+        this.pixels[11] = color;
+        this.pixels[113] = color;
+        this.pixels[102] = color;
+        this.pixels[0] = color;
+        break;
+    }
 
     // Set pixels
     concatArray.forEach( element => {
