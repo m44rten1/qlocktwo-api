@@ -34,8 +34,12 @@ app.use((error, req, res, next) => {
     });
 });
 
-// TODO: Delete this line, testing line for rendring a random hour
+// TODO: Delete this lines, testing line for rendring a random hour
 global.clock.render();
-
+setInterval(() => {
+    console.log("Bightness: " + global.clock.brightness);
+    console.log("Temperature: " + global.clock.temperature);
+    console.log("-----------------------------------------------");
+}, 1000);
 
 module.exports = app;
