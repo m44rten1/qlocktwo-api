@@ -34,4 +34,8 @@ app.use((error, req, res, next) => {
     });
 });
 
+// TODO: Delete this line, testing line for rendring a random hour
+global.clock.render();
+
+
 module.exports = app;
