@@ -63,11 +63,11 @@ const clock = {
   },
   measurements() {
     const tempSensor = mcpadc.open(2, { speedHz: 20000 }, err => {
-      if (err) throw err;
+      if (err) console.log(err);
 
       setInterval(_ => {
         tempSensor.read((err, reading) => {
-          if (err) throw err;
+          if (err) console.log(err);
           tempFilter.shift();
           tempFilter.push((reading.value * 5 - 0.5) * 100);
           this.temperature = average(tempFilter);
@@ -76,11 +76,11 @@ const clock = {
     });
 
     const lightsensor = mcpadc.open(3, { speedHz: 20000 }, err => {
-      if (err) throw err;
+      if (err) console.log(err);
 
       setInterval(_ => {
         lightsensor.read((err, reading) => {
-          if (err) throw err;
+          if (err) console.log(err);
             
           brightnessFilter.shift();
           brightnessFilter.push(reading.value * 100);
