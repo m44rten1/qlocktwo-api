@@ -34,12 +34,28 @@ app.use((error, req, res, next) => {
     });
 });
 
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+async function lsWithGrep() {
+  try {
+      const { stdout, stderr } = await exec('sudo iwlist wlan0 scan | grep ESSID');
+
+	var out = stdout.split("\n").map( out => out.substring(out.lastIndexOf(":") + 2, out.lastIndexOf("\"")));
+	out.pop();      
+	console.log('stdout:', out);
+      console.log('stderr:', stderr);
+  }catch (err){
+     console.error(err);
+  };
+};
+lsWithGrep();
+
 // TODO: Delete this lines, testing line for rendring a random hour
-global.clock.render();
-setInterval(() => {
-    console.log("Bightness: " + global.clock.brightness);
-    console.log("Temperature: " + global.clock.temperature);
-    console.log("-----------------------------------------------");
-}, 1000);
+// global.clock.render();
+// setInterval(() => {
+//     console.log("Bightness: " + global.clock.brightness);
+//     console.log("Temperature: " + global.clock.temperature);
+//     console.log("-----------------------------------------------");
+// }, 1000);
 
 module.exports = app;
