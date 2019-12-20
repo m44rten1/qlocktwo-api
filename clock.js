@@ -115,11 +115,10 @@ const clock = {
     ws281x.render(this.pixels);
 
   },
-  renderText(text, speed, repeatFactor) {
+  renderText(text, speed) {
 
     // speed: time between each transition (s)
     // text: text to be displayed
-    // repeatFactor: number of times the text needs to be shown
 
     // Get settings
     let rawdata = fs.readFileSync("settings.json");
@@ -127,25 +126,8 @@ const clock = {
     var color = getColor(settings);
     var that = this;
     
-    var factor = 0;
     var startIndex = 11;
     displayText(startIndex);
-    if(repeatFactor > 0) {
-      repeatFactor--;
-      loopText();
-    }
-    function loopText() { 
-      setTimeout(function () {   
-        var startIndex = 11;
-        displayText(startIndex);
-        
-        factor++;
-
-         if (factor < repeatFactor) {           
-          loopText();    
-         }                       
-      }, 1)//parseInt(speed * 1000) * (text.length + 20))  
-    }
 
     function displayText(index) { 
       setTimeout(function () {   
@@ -155,7 +137,7 @@ const clock = {
         that.snapshotToPixels(snapshot, color);
         ws281x.render(that.pixels);
         index--;                    
-        if (index > - (text.length * 5 + 1)) {           
+        if (index > - (text.length + 1) * 5) {           
           displayText(index);    
         }                       
       }, parseInt(speed * 1000))
