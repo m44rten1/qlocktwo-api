@@ -1,8 +1,15 @@
 const express = require('express');
 const fs = require('fs');
 const router = express.Router();
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+var wifiControl = require('wifi-control');
+var settings = {
+    debug: true,
+    iface: 'wlan1',
+    connectionTimeout: 10000 // in ms
+};
+wifiControl.configure( settings );
+
+
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
@@ -10,21 +17,6 @@ router.get('/', (req, res, next) => {
 
     res.status(200).json(settings)
 });
-
-router.get('/message', (req, res, next) => {
-    console.log(req.query.message);
-    res.status(200).json(global.clock.renderText(req.query.message, 0.1));
-});
-
-// TODO: finsish this
-// router.get('/wifi-networks', (req, res, next) => {
-//     getWifiList().then( data => {
-
-//         res.status(200).json(data);
-//     }).catch( error => res.status())
-
-    
-// });
 
 router.post('/', (req, res, next) => {
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
@@ -38,19 +30,54 @@ router.post('/', (req, res, next) => {
     });
 });
 
-module.exports = router;
+router.get('/message', (req, res, next) => {
+    res.status(200).json(global.clock.renderText(req.query.message, 0.1));
+});
 
+// TODO: check this
+router.get('/connected-to-internet', (req, res, next) => {
+    require('dns').resolve('www.google.com', function(err) {
+        if (err) {
+            res.status(200).json(false)
+        } else {
+            res.status(200).json(true)
+        }
+    });
+});
+
+// TODO: check this
+router.get('/wifi-networks', (req, res, next) => {
+    new Promise((resolve, reject) => {
+        WiFiControl.scanForWiFi( function(err, response) {
+            if (err) reject(err);
+            resolve(response);
+          });
+    }).then( (response) => {
+        res.status(200).json(response);
+    }).catch(error => res.status(error))
+});
+
+// TODO: check this
+router.get('/current-connection', (req, res, next) => {
+    res.status(200).json(wifiControl.getIfaceState());
+});
 
 // TODO: finish this
-// async function getWifiList() {
-//   try {
-//     const { stdout, stderr } = await exec('sudo iwlist wlan0 scan | grep ESSID');
+router.post('/connect-to-wifi', (req, res, next) => {
+    // example data: { ssid: "nameOfWifiNetwork", password: "psswrdOfWifiNetwork"} Het kan dat er geen password is!!
+    var connectionData = JSON.parse(req.body);    // TODO: nodig om te parsen?
+    console.log("Parsed: ", connectionData);
 
-// 	var networks = stdout.split("\n").map( out => out.substring(out.lastIndexOf(":") + 2, out.lastIndexOf("\"")));
-// 	networks.pop();      
-// 	return networks;
-//   }catch (err){
-//      console.error(err);
-//      return err 
-//   };
-// };
+    new Promise((resolve, reject) => {
+        WiFiControl.connectToAP( connectionData, function(err, response) {
+            if (err) reject(err);
+            resolve(response);
+        })
+    }).then( (response) => {
+        res.status(200).json(response);
+    }).catch(error => res.status(error))
+});
+
+
+
+module.exports = router;

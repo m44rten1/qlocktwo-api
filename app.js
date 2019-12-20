@@ -34,22 +34,6 @@ app.use((error, req, res, next) => {
     });
 });
 
-// Get wifi networks
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-async function lsWithGrep() {
-  try {
-      const { stdout, stderr } = await exec('sudo iwlist wlan0 scan | grep ESSID');
-
-	var out = stdout.split("\n").map( out => out.substring(out.lastIndexOf(":") + 2, out.lastIndexOf("\"")));
-	out.pop();      
-	console.log('Wifi networks array:', out);
-  }catch (err){
-     console.error(err);
-  };
-};
-lsWithGrep();
-
 // Write to file:
 const fs = require('fs');
 
