@@ -156,6 +156,7 @@ const clock = {
         that.snapshotToPixels(snapshot, color);
         console.log("New pixels: ", that.pixels.length);
         ws281x.render(new Uint32Array(JSON.parse(JSON.stringify(that.pixels))));
+        debugger;
         index--;                    
         if (index < - (text.length + 1)) {           
           displayText(index);    
