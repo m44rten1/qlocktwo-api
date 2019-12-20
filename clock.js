@@ -119,6 +119,10 @@ const clock = {
 
     // speed: time between each transition (s)
     // text: text to be displayed
+    if(!undefined) {
+      text = "Do you want to go on a date with me?         (please say yes!)";
+      speed = 0.10;
+    }
 
     // Get settings
     let rawdata = fs.readFileSync("settings.json");

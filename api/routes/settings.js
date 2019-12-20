@@ -11,6 +11,10 @@ router.get('/', (req, res, next) => {
     res.status(200).json(settings)
 });
 
+router.get('/message', (req, res, next) => {
+    res.status(200).json(global.clock.renderText());
+});
+
 // TODO: finsish this
 // router.get('/wifi-networks', (req, res, next) => {
 //     getWifiList().then( data => {
