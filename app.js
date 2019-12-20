@@ -34,6 +34,7 @@ app.use((error, req, res, next) => {
     });
 });
 
+// Get wifi networks
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 async function lsWithGrep() {
@@ -42,20 +43,33 @@ async function lsWithGrep() {
 
 	var out = stdout.split("\n").map( out => out.substring(out.lastIndexOf(":") + 2, out.lastIndexOf("\"")));
 	out.pop();      
-	console.log('stdout:', out);
-      console.log('stderr:', stderr);
+	console.log('Wifi networks array:', out);
   }catch (err){
      console.error(err);
   };
 };
 lsWithGrep();
 
+// Write to file:
+const fs = require('fs');
+
+fs.appendFile("/tmp/test", "\nnetwork:{\nabc:efg\nhij:klm\n}", function(err) {
+    if(err) {
+        return console.log(err);
+    }
+    console.log("The file was saved!");
+}); 
+
+
+
 // TODO: Delete this lines, testing line for rendring a random hour
-// global.clock.render();
+// global.clock.renderTime();
 // setInterval(() => {
 //     console.log("Bightness: " + global.clock.brightness);
 //     console.log("Temperature: " + global.clock.temperature);
 //     console.log("-----------------------------------------------");
 // }, 1000);
+
+global.clock.renderText("hello world", 1, 3);
 
 module.exports = app;

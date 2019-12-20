@@ -11,6 +11,7 @@ brightnessFilter = new Array(150).fill(0);
 const clock = {
   pixels: null,
   pixel: null,  // Lonley LED
+  raster: null, // Led map raster: led-indexes in a 11 x 10 array
   config: {},
   brightness: 0,
   temperature: 0,
@@ -58,6 +59,7 @@ const clock = {
     this.pixels = new Uint32Array(this.config.leds);
   },
   init() {
+    this.raster = this.buildAddressRaster();
     this.initLeds();
     this.measurements();
   },
@@ -89,7 +91,7 @@ const clock = {
       }, 200);
     });
   },
-  render() {
+  renderTime() {
     // Get settings
     let rawdata = fs.readFileSync("settings.json");
     let settings = JSON.parse(rawdata);
@@ -112,11 +114,131 @@ const clock = {
     ws281x.render(this.pixels);
 
   },
-  timeToArray(hours, minutes, color) {
+  renderText(text, speed, repeatFactor) {
+
+    // speed: time between each transition (s)
+    // text: text to be displayed
+    // repeatFactor: number of times the text needs to be shown
+
+    // Get settings
+    let rawdata = fs.readFileSync("settings.json");
+    let settings = JSON.parse(rawdata);
+    var color = getColor(settings);
+    
+    var factor = 0;
+    loopText();
+
+    function loopText() { 
+      setTimeout(function () {   
+        var startIndex = 11;
+        displayText(startIndex);
+        
+        factor++;
+
+         if (factor < repeatFactor) {           
+          loopText();    
+         }                       
+      }, parseInt(speed * 1000) * (text.length + 20))  
+    }
+
+    function displayText(index) { 
+      setTimeout(function () {   
+        this.clearPixels();
+        var snapshot = this.createEmptySnapshotArray();
+        snapshot = this.addLetters(snapshot, index, text);
+        this.snapshotToPixels(snapshot, color);
+        ws281x.render(this.pixels);
+        index--;                    
+        if (index < - (text.length + 1)) {           
+          displayText(index);    
+        }                       
+      }, parseInt(speed * 1000))
+    }
+  },
+  snapshotToPixels(snapshot, color) {
+    for(var i = 0; i < snapshot.length; i++) {
+      for(var j = 0; j < snapshot[0].length; j++) {
+        if(snapshot[i][j]) {
+          this.pixels[this.raster[i][j]] = color;
+        }
+      }
+    }
+  },
+  createEmptySnapshotArray() {
+    var snapshot = [];
+    for(var i = 0; i < 11; i++) {
+      snapshot[i] = [];
+      for(var j = 0; j < 10; j++) {
+        snapshot[i][j] = false;
+      }
+    }
+    return snapshot;
+  },
+  buildAddressRaster() {
+    // Build empty 11 x 10 array
+    var raster = [];
+    for(var i = 0; i < 11; i++) {
+      raster[i] = [];
+    }
+
+    // Fill up raster
+    for(var j = 0; j < 10; j++) {
+      // Fist row
+      raster[0][j] = 10 - j;
+
+      // Last row
+      raster[10][j] = 112 - j;
+
+      // Middle rows
+      for (var i = 1; i < 10; i++) {
+        // Even rows
+        if (i % 2 == 0 ) {
+          raster[i][j] = (i + 1) * 10 + 1 - j;
+        }
+
+        // Odd rows
+        if (i % 2 != 0) {
+          raster[i][j] = i * 10 + 2 + j;
+        }
+      }
+    }
+  },
+  addLetter(snapshotArray, index, charLetter) {
+    // index can be smaller than 0! 0 means the letter is all the way to the left and completely visible
+    var leds = charToLED(charLetter);
+    for(var i = index; i < index + 5; i++) {
+      for(var j = 2; j < 9; j++) {
+        if (i >= 0 && i < 11) {
+          snapshotArray[i][j] = leds[i - index][j - 2];
+        }
+      }
+    }
+    return snapshotArray;
+
+  },
+  addLetters(snapshotArray, index, text) {
+    var spaceBetweenLetters = 1;
+    var spaceBetweenWords = 3;
+    var wordArray = text.toUpperCase().split(' ');
+
+    wordArray.forEach( word => {
+      word.split("").forEach(letter => {
+        snapshotArray = this.addLetter(snapshotArray, index, letter);
+        index += 5 + spaceBetweenLetters;
+      })
+      index += (spaceBetweenWords - spaceBetweenLetters);
+    });
+    return snapshotArray;
+  },
+  clearPixels() {
     // Clear pixels
     this.pixels.forEach((pixel, index) => {
       this.pixels[index] = 0;
     });
+  },
+  timeToArray(hours, minutes, color) {
+    // Clear pixels
+    this.clearPixels();
 
     var roundedMinutes = parseInt(minutes / 5) * 5;
     var roundedHours = hours % 12;
@@ -278,6 +400,197 @@ var average = function(arr) {
     }); 
 
     return sum / arr.length;
+}
+
+function charToLED(theChar){
+  var theLed = [];
+	switch(theChar){
+    case 'A' :
+      theLed = [[false, false, true, true, true, true, true], 
+                [false, true, false, false, true, false, false], 
+                [true, false, false, false, true, false, false],
+                [false, true, false, false, true, false, false],
+                [false, false, true, true, true, true, true]];
+      break;
+    case 'B' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [false, true, true, false, true, true, false]];
+      break;
+		case 'C' :
+      theLed = [[false, true, true, true, true, true, false], 
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [false, true, false, false, false, true, false]]; 
+      break;
+     case 'D' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [false, true, true, true, true, true, false]]; 
+      break;
+    case 'E' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, false, false, false, false, true]];
+      break;
+    case 'F' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [true, false, false, false, false, false, false]];
+      break;
+    case 'G' :
+      theLed = [[false, true, true, true, true, true, false], 
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, true, false, true],
+                [true, true, false, false, true, true, true]];
+      break;
+    case 'H' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [false, false, false, true, false, false, false],
+                [false, false, false, true, false, false, false],
+                [false, false, false, true, false, false, false],
+                [true, true, true, true, true, true, true]];
+      break;
+    case 'I' :
+      theLed = [[false, false, false, false, false, false, false], 
+                [true, false, false, false, false, false, true],
+                [true, true, true, true, true, true, true],
+                [true, false, false, false, false, false, true],
+                [false, false, false, false, false, false, false]];
+      break;
+    case 'J' :
+      theLed = [[false, false, false, false, false, true, false], 
+                [false, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [true, true, true, true, true, true, false],
+                [true, false, false, false, false, false, false]];
+      break;  
+ 	 case 'K' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [false, false, false, true, false, false, false],
+                [false, false, true, false, true, false, false],
+                [false, true, false, false, false, true, false],
+                [true, false, false, false, false, false, true]];
+      break;
+ 	 case 'L' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, false, true]];
+      break;
+ 	 case 'M' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [false, true, false, false, false, false, false],
+                [false, false, true, false, false, false, false],
+                [false, true, false, false, false, false, false],
+                [true, true, true, true, true, true, true]];
+      break;
+ 	 case 'N' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [false, false, true, false, false, false, false],
+                [false, false, false, true, false, false, false],
+                [false, false, false, false, true, false, false],
+                [true, true, true, true, true, true, true]];
+      break;
+ 	 case 'O' :
+      theLed = [[false, true, true, true, true, true, false], 
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, false, false, true],
+                [false, true, true, true, true, true, false]];
+      break;
+ 	 case 'P' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [false, true, true, false, false, false, false]];
+      break;
+ 	 case 'Q' :
+      theLed = [[false, true, true, true, true, true, false], 
+                [true, false, false, false, false, false, true],
+                [true, false, false, false, true, false, true],
+                [true, false, false, false, false, true, false],
+                [false, true, true, true, true, false, true]];
+      break;
+ 	 case 'R' :
+      theLed = [[true, true, true, true, true, true, true], 
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [true, false, false, true, false, false, false],
+                [false, true, true, false, true, true, true]];
+      break;
+ 	 case 'S' :
+      theLed = [[false, true, true, false, false, false, true], 
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, false, false, true, true, false]];
+      break;
+ 	 case 'T' :
+      theLed = [[true, false, false, false, false, false, false], 
+                [true, false, false, false, false, false, false],
+                [true, true, true, true, true, true, true],
+                [true, false, false, false, false, false, false],
+                [true, false, false, false, false, false, false]];
+      break;
+ 	 case 'U' :
+      theLed = [[true, true, true, true, true, true, false], 
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, false, true],
+                [true, true, true, true, true, true, false]];
+      break;
+ 	 case 'V' :
+      theLed = [[true, true, true, true, true, false, false], 
+                [false, false, false, false, false, true, false],
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, false, true, false],
+                [true, true, true, true, true, false, false]];
+      break;
+ 	 case 'W' :
+      theLed = [[true, true, true, true, true, true, false], 
+                [false, false, false, false, false, false, true],
+                [false, false, false, false, true, true, false],
+                [false, false, false, false, false, false, true],
+                [true, true, true, true, true, true, false]];
+      break;
+ 	 case 'X' :
+      theLed = [[true, false, false, false, false, false, true], 
+                [false, true, true, false, true, true, false],
+                [false, false, false, true, false, false, false],
+                [false, true, true, false, true, true, false],
+                [true, false, false, false, false, false, true]];
+      break;
+ 	 case 'Y' :
+      theLed = [[true, false, false, false, false, false, false], 
+                [false, true, false, false, false, false, false],
+                [false, false, true, true, true, true, true],
+                [false, true, false, false, false, false, false],
+                [true, false, false, false, false, false, false]];
+      break;
+ 	 case 'Z' :
+      theLed = [[true, false, false, false, false, true, true], 
+                [true, false, false, false, true, false, true],
+                [true, false, false, true, false, false, true],
+                [true, false, true, false, false, false, true],
+                [true, true, false, false, false, false, true]];
+      break;
+    default:
+      theLed = [[false, false, false, false, false, false, false]];
+  }  
+  return theLed;
 }
 
 module.exports = clock;
