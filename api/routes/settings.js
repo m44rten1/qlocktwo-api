@@ -12,6 +12,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/message', (req, res, next) => {
+    console.log(req);
     res.status(200).json(global.clock.renderText());
 });
 
