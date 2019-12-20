@@ -111,6 +111,7 @@ const clock = {
     );
 
     this.timeToArray( hour, minutes, getColor(settings));
+    console.log("Pixels: ", this.pixels, "length: ", this.pixels.length);
     ws281x.render(this.pixels);
 
   },
