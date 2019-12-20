@@ -124,10 +124,15 @@ const clock = {
     let rawdata = fs.readFileSync("settings.json");
     let settings = JSON.parse(rawdata);
     var color = getColor(settings);
+    var that = this;
     
     var factor = 0;
-    loopText();
-
+    var startIndex = 11;
+    displayText(startIndex);
+    if(repeatFactor > 0) {
+      repeatFactor--;
+      loopText();
+    }
     function loopText() { 
       setTimeout(function () {   
         var startIndex = 11;
@@ -143,11 +148,11 @@ const clock = {
 
     function displayText(index) { 
       setTimeout(function () {   
-        this.clearPixels();
-        var snapshot = this.createEmptySnapshotArray();
-        snapshot = this.addLetters(snapshot, index, text);
-        this.snapshotToPixels(snapshot, color);
-        ws281x.render(this.pixels);
+        that.clearPixels();
+        var snapshot = that.createEmptySnapshotArray();
+        snapshot = that.addLetters(snapshot, index, text);
+        that.snapshotToPixels(snapshot, color);
+        ws281x.render(that.pixels);
         index--;                    
         if (index < - (text.length + 1)) {           
           displayText(index);    
