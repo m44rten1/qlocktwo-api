@@ -415,6 +415,13 @@ function charToLED(theChar){
     //             [false, false, false, false, false, false, false],
     //             [false, false, false, false, false, false, false]];
     //   break;
+    case '!' :
+      theLed = [[false, false, false, false, false, false, false], 
+                [false, false, false, false, false, false, false], 
+                [true, true, true, true, true, false, true],
+                [false, false, false, false, false, false, false],
+                [false, false, false, false, false, false, false]];
+      break;
     case '?' :
       theLed = [[false, true, false, false, false, false, false], 
                 [true, false, false, false, false, false, false], 
