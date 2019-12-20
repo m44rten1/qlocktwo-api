@@ -210,6 +210,7 @@ const clock = {
         }
       }
     }
+    return raster;
   },
   addLetter(snapshotArray, index, charLetter) {
     // index can be smaller than 0! 0 means the letter is all the way to the left and completely visible
