@@ -144,7 +144,7 @@ const clock = {
          if (factor < repeatFactor) {           
           loopText();    
          }                       
-      }, parseInt(speed * 1000) * (text.length + 20))  
+      }, 1)//parseInt(speed * 1000) * (text.length + 20))  
     }
     console.log("Old pixels: ", this.pixels.length);
 
