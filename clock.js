@@ -152,7 +152,7 @@ const clock = {
         var snapshot = that.createEmptySnapshotArray();
         snapshot = that.addLetters(snapshot, index, text);
         that.snapshotToPixels(snapshot, color);
-        ws281x.render(that.pixels);
+        ws281x.render(JSON.parse(JSON.stringify(that.pixels)));
         index--;                    
         if (index < - (text.length + 1)) {           
           displayText(index);    
