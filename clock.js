@@ -157,7 +157,7 @@ const clock = {
         console.log("New pixels: ", that.pixels.length);
         ws281x.render(that.pixels);
         index--;                    
-        if (index < - (text.length + 1)) {           
+        if (index > - (text.length + 1)) {           
           displayText(index);    
         }                       
       }, parseInt(speed * 1000))
