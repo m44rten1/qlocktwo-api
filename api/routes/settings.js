@@ -12,6 +12,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/message/:text', (req, res, next) => {
+    console.log(req.params.text);
     res.status(200).json(global.clock.renderText(req.params.text, 0.1));
 });
 
