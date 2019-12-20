@@ -12,6 +12,7 @@ const clock = {
   pixels: null,
   pixel: null,  // Lonley LED
   raster: null, // Led map raster: led-indexes in a 11 x 10 array
+  busyRendering: false, // Other functions will only render if this variable is false
   config: {},
   brightness: 0,
   temperature: 0,
@@ -116,11 +117,12 @@ const clock = {
 
   },
   renderText(text, speed) {
-
+    if (this.busyRendering) return;
+    this.busyRendering = true;
     // speed: time between each transition (s)
     // text: text to be displayed
     if(!undefined) {
-      text = "Do you want to go on a date with me?         (please say yes!)";
+      text = "Hello Maren! Do you want to go on a date with me?         (please say yes!)";
       speed = 0.10;
     }
 
@@ -159,6 +161,8 @@ const clock = {
 
         if (index > - indexLength) {           
           displayText(index);    
+        } else {
+          that.busyRendering = false;
         }                       
       }, parseInt(speed * 1000))
     }
