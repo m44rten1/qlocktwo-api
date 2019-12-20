@@ -70,6 +70,6 @@ fs.appendFile("/tmp/test", "\nnetwork:{\nabc:efg\nhij:klm\n}", function(err) {
 //     console.log("-----------------------------------------------");
 // }, 1000);
 
-global.clock.renderText("hello world", 0.2);
+global.clock.renderText("hello world?", 0.2);
 
 module.exports = app;
