@@ -130,23 +130,22 @@ const clock = {
     var factor = 0;
     var startIndex = 11;
     displayText(startIndex);
-    // if(repeatFactor > 0) {
-    //   repeatFactor--;
-    //   loopText();
-    // }
-    // function loopText() { 
-    //   setTimeout(function () {   
-    //     var startIndex = 11;
-    //     displayText(startIndex);
+    if(repeatFactor > 0) {
+      repeatFactor--;
+      loopText();
+    }
+    function loopText() { 
+      setTimeout(function () {   
+        var startIndex = 11;
+        displayText(startIndex);
         
-    //     factor++;
+        factor++;
 
-    //      if (factor < repeatFactor) {           
-    //       loopText();    
-    //      }                       
-    //   }, 1)//parseInt(speed * 1000) * (text.length + 20))  
-    // }
-    // console.log("Old pixels: ", this.pixels.length);
+         if (factor < repeatFactor) {           
+          loopText();    
+         }                       
+      }, 1)//parseInt(speed * 1000) * (text.length + 20))  
+    }
 
     function displayText(index) { 
       setTimeout(function () {   
@@ -154,7 +153,6 @@ const clock = {
         var snapshot = that.createEmptySnapshotArray();
         snapshot = that.addLetters(snapshot, index, text);
         that.snapshotToPixels(snapshot, color);
-        console.log("New pixels: ", that.pixels.length);
         ws281x.render(that.pixels);
         index--;                    
         if (index > - (text.length * 5 + 1)) {           
@@ -227,7 +225,7 @@ const clock = {
   },
   addLetters(snapshotArray, index, text) {
     var spaceBetweenLetters = 1;
-    var spaceBetweenWords = 3;
+    var spaceBetweenWords = 4;
     var wordArray = text.toUpperCase().split(' ');
 
     wordArray.forEach( word => {
