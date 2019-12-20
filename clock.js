@@ -1,6 +1,6 @@
 const fs = require("fs");
 const ws281x = require("rpi-ws281x");
-const ws281x_1 = require("rpi-ws281x");
+// const ws281x_1 = require("rpi-ws281x");
 const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
@@ -145,7 +145,7 @@ const clock = {
          }                       
       }, parseInt(speed * 1000) * (text.length + 20))  
     }
-    console.log("Old pixels: ", this.pixels);
+    console.log("Old pixels: ", this.pixels.length);
 
     function displayText(index) { 
       setTimeout(function () {   
@@ -153,7 +153,7 @@ const clock = {
         var snapshot = that.createEmptySnapshotArray();
         snapshot = that.addLetters(snapshot, index, text);
         that.snapshotToPixels(snapshot, color);
-        console.log("New pixels: ", that.pixels);
+        console.log("New pixels: ", that.pixels.length);
         ws281x.render(new Uint32Array(JSON.parse(JSON.stringify(that.pixels))));
         index--;                    
         if (index < - (text.length + 1)) {           
