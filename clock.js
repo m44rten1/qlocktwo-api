@@ -125,7 +125,21 @@ const clock = {
     let settings = JSON.parse(rawdata);
     var color = getColor(settings);
     var that = this;
-    
+    var spaceBetweenLetters = 1;
+    var spaceBetweenWords = 4;
+    var indexLength = 0;
+    text.split("").forEach(character => {
+      if(character == " ") {
+        indexLength += spaceBetweenWords;
+      } else {
+        indexLength += 5 + spaceBetweenLetters;
+      }
+    });
+
+
+    // Calculate total index diff
+
+
     var startIndex = 11;
     displayText(startIndex);
 
@@ -133,11 +147,13 @@ const clock = {
       setTimeout(function () {   
         that.clearPixels();
         var snapshot = that.createEmptySnapshotArray();
-        snapshot = that.addLetters(snapshot, index, text);
+        snapshot = that.addLetters(snapshot, index, text, spaceBetweenLetters, spaceBetweenWords);
         that.snapshotToPixels(snapshot, color);
         ws281x.render(that.pixels);
-        index--;                    
-        if (index > - (text.length + 1) * 5) {           
+        console.log("Rendered index: ", index);
+        index--;
+
+        if (index > - indexLength) {           
           displayText(index);    
         }                       
       }, parseInt(speed * 1000))
@@ -205,9 +221,7 @@ const clock = {
     return snapshotArray;
 
   },
-  addLetters(snapshotArray, index, text) {
-    var spaceBetweenLetters = 1;
-    var spaceBetweenWords = 4;
+  addLetters(snapshotArray, index, text, spaceBetweenLetters, spaceBetweenWords) {
     var wordArray = text.toUpperCase().split(' ');
 
     wordArray.forEach( word => {
