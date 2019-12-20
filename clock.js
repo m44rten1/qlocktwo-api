@@ -130,23 +130,23 @@ const clock = {
     var factor = 0;
     var startIndex = 11;
     displayText(startIndex);
-    if(repeatFactor > 0) {
-      repeatFactor--;
-      loopText();
-    }
-    function loopText() { 
-      setTimeout(function () {   
-        var startIndex = 11;
-        displayText(startIndex);
+    // if(repeatFactor > 0) {
+    //   repeatFactor--;
+    //   loopText();
+    // }
+    // function loopText() { 
+    //   setTimeout(function () {   
+    //     var startIndex = 11;
+    //     displayText(startIndex);
         
-        factor++;
+    //     factor++;
 
-         if (factor < repeatFactor) {           
-          loopText();    
-         }                       
-      }, 1)//parseInt(speed * 1000) * (text.length + 20))  
-    }
-    console.log("Old pixels: ", this.pixels.length);
+    //      if (factor < repeatFactor) {           
+    //       loopText();    
+    //      }                       
+    //   }, 1)//parseInt(speed * 1000) * (text.length + 20))  
+    // }
+    // console.log("Old pixels: ", this.pixels.length);
 
     function displayText(index) { 
       setTimeout(function () {   
