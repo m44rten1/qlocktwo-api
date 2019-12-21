@@ -107,6 +107,7 @@ const clock = {
     let tick = 0;
     // Render every second
     setInterval(() => {
+      console.log("Tick!");
       // Times
       this.renderTime();
 
@@ -470,7 +471,7 @@ const clock = {
     var concatArray = [];
 
     if (tensDigit == 0) {
-      
+
     } else {
 
     }
