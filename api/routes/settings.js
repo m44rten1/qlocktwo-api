@@ -30,7 +30,7 @@ router.get('/message', (req, res, next) => {
 
 // TODO: check this
 router.get('/connected-to-internet', (req, res, next) => {
-    require('dns').resolve('www.google.com', function(err) {
+    require('dns').resolve('8.8.8.8', function(err) {
         if (err) {
             res.status(200).json(false)
         } else {
