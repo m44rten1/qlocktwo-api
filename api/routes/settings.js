@@ -63,7 +63,9 @@ router.get('/current-connection', (req, res, next) => {
 router.post('/connect-to-wifi', (req, res, next) => {
     // example data: { ssid: "nameOfWifiNetwork", psk: "psswrdOfWifiNetwork"} Het kan dat er geen password is!!
     //ar connectionData = JSON.parse(req.body);    // TODO: nodig om te parsen?
-    console.log("data: ", connectionData);
+    console.log("data: ", req.body);
+
+    console.log("data parsed: ", JSON.parse(req.body));
 
     wifi.connect(connectionData).then(() => {
         res.status(200).json(true);
