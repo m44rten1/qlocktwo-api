@@ -45,16 +45,4 @@ fs.appendFile("/tmp/test", "\nnetwork:{\nabc:efg\nhij:klm\n}", function(err) {
 }); 
 
 
-
-// TODO: Delete this lines, testing line for rendring a random hour
-global.clock.renderTime();
-
-// setInterval(() => {
-//     console.log("Bightness: " + global.clock.brightness);
-//     console.log("Temperature: " + global.clock.temperature);
-//     console.log("-----------------------------------------------");
-// }, 1000);
-
-//global.clock.renderText("Do you want to go on a date with me?         (please say yes!)", 0.10);
-
 module.exports = app;

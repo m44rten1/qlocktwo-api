@@ -47,7 +47,45 @@ const clock = {
 
     }
   },
-  
+  numbers: {
+    minusSign: [5, 17, 26],
+    singleDigit: [
+        [74, 69, 54, 49, 48, 47, 46, 45, 44, 43, 60, 63, 80, 79, 78, 77, 76, 75], // 0
+        [74, 75, 76, 77, 78, 79, 80], // 1
+        [49, 54, 69, 74, 75, 76, 77, 66, 57, 46, 45, 44, 43, 60, 63, 90], // 2
+        [49, 54, 69, 74, 75, 76, 77, 66, 57, 78, 79, 80, 63, 60, 43], // 3
+        [49, 48, 47, 46, 57, 66, 77, 68, 67, 66, 65, 64, 63], // 4
+        [74, 69, 54, 49, 48, 47, 46, 57, 66, 77, 78, 79, 80, 63, 60, 43], // 5
+        [74, 69, 54, 49, 48, 47, 46, 45, 44, 43, 60, 63, 80, 79, 78, 77, 66, 57], // 6
+        [49, 54, 69, 74, 75, 76, 77, 78, 79, 80], // 7
+        [74, 69, 54, 49, 48, 47, 46, 57, 66, 77, 78, 79, 80, 63, 60, 43, 44, 45, 76, 75], // 8
+        [74, 69, 54, 49, 48, 47, 46, 57, 66, 77, 75, 76, 78, 79, 80, 63, 60, 43], // 9
+    ],
+    doubleDigitTens: [
+        [16, 28, 34, 35, 36, 37, 38, 39, 23, 40, 43], // 1
+        [15, 29, 34, 48, 47, 37, 25, 19, 20, 23, 40, 43], // 2
+        [15, 29, 34, 48, 47, 37, 26, 45, 44, 40, 23, 19], // 3
+        [14, 15, 16, 17, 26, 37, 46, 34, 35, 36, 37, 38, 39, 40], // 4
+        [49, 34, 29, 14, 15, 16, 17, 26, 37, 45, 44, 40, 23, 20], // 5
+        [49, 34, 29, 15, 16, 17, 18, 19, 23, 40, 44, 45, 37, 26, 17], // 6
+        [14, 29, 34, 49, 48, 36, 26, 25, 24, 23], // 7
+        [34, 29, 15, 16, 26, 18, 19, 23, 40, 44, 45, 37, 47, 48], // 8
+        [34, 29, 15, 16, 26, 37, 48, 47, 46, 45, 44, 40, 23, 19], // 9
+    ],
+
+    doubleDigitUnits: [
+        [89, 74, 68, 67, 66, 65, 64, 80, 83, 99, 98, 97, 96, 95, 78, 86, 96], // 0
+        [67, 75, 89, 88, 87, 86, 85, 84, 83, 80, 83, 100], // 1
+        [68, 74, 89, 95, 96, 86, 78, 64, 63, 80, 83, 100], // 2
+        [68, 74, 89, 95, 96, 86, 77, 98, 99, 83, 80, 64], // 3
+        [69, 68, 67, 66, 77, 86, 97, 89, 88, 87, 86, 85, 84, 83], // 4
+        [94, 89, 74, 69, 68, 67, 66, 77, 86, 98, 99, 83, 80, 63], // 5
+        [94, 89, 74, 68, 67, 66, 65, 64, 80, 83, 99, 98, 86, 77], // 6
+        [69, 74, 89, 94, 95, 87, 77, 78, 79, 80], // 7
+        [89, 74, 68, 67, 77, 65, 64, 80, 83, 99, 98, 86, 96, 95], // 8
+        [89, 74, 68, 67, 77, 86, 95, 96, 97, 98, 99, 83, 80, 64], // 9
+    ],
+  },
   initLeds() {
     this.config.dma = 10;
     this.config.brightness = 255;
@@ -63,6 +101,33 @@ const clock = {
     this.raster = this.buildAddressRaster();
     this.initLeds();
     this.measurements();
+    this.clockControl();
+  },
+  clockControl() {
+    let tick = 0;
+    // Render every second
+    setInterval(() => {
+      // Times
+      this.renderTime();
+
+      // Temperatures
+      // Get settings
+      let rawdata = fs.readFileSync("settings.json");
+      let settings = JSON.parse(rawdata);
+
+      if(!settings.temperature.off) {
+        if(tick % (60 * settings.temperature.frequency)){
+          this.renderTemperature(settings.temperature.onTime);
+        }
+      }
+      
+
+
+
+      tick++;
+    }, 1000); // Must be 1000 ms!
+
+
   },
   measurements() {
     const tempSensor = mcpadc.open(2, { speedHz: 20000 }, err => {
@@ -73,7 +138,8 @@ const clock = {
           if (err) throw err;
           tempFilter.shift();
           tempFilter.push((reading.value * 5 - 0.5) * 100);
-          this.temperature = average(tempFilter);
+          var temperature = average(tempFilter) - 54;
+          this.temperature = (14.0 / 16.1) * (temperature - 60.0) + 8.0;  // Temperature conversion based on two measuring points
         });
       }, 200);
     });
@@ -93,28 +159,17 @@ const clock = {
     });
   },
   renderTime() {
-    // Get settings
-    let rawdata = fs.readFileSync("settings.json");
-    let settings = JSON.parse(rawdata);
+    if(!this.busyRendering) {
+      // Get settings
+      let rawdata = fs.readFileSync("settings.json");
+      let settings = JSON.parse(rawdata);
 
-    // Check what to show
-    //this.pixels[0] = getColor(settings);
-    
+      var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
+      var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
 
-
-    var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
-    var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
-
-    // minutes = parseInt(Math.random() * 60);
-    // hour = parseInt(Math.random() * 24);
-    // console.log(
-    //   "Hour:minutes   " + hour + ":" + minutes
-    // );
-
-    this.timeToArray( hour, minutes, getColor(settings));
-    console.log("Pixels: ", this.pixels, "length: ", this.pixels.length);
-    ws281x.render(this.pixels);
-
+      this.timeToArray( hour, minutes, getColor(settings));
+      ws281x.render(this.pixels);
+    }
   },
   renderText(text, speed) {
     if (this.busyRendering) return;
@@ -141,12 +196,13 @@ const clock = {
 
     // Calculate total index diff
 
-
+    console.log("PRE SET TIMEOUT")
     var startIndex = 11;
     displayText(startIndex);
 
     function displayText(index) { 
-      setTimeout(function () {   
+      setTimeout(function () {
+        console.log("IN SET TIMEOUT FUNCTION") 
         that.clearPixels();
         var snapshot = that.createEmptySnapshotArray();
         snapshot = that.addLetters(snapshot, index, text, spaceBetweenLetters, spaceBetweenWords);
@@ -162,6 +218,16 @@ const clock = {
         }                       
       }, parseInt(speed * 1000))
     }
+  },
+  renderTemperature(onTime) {
+    this.busyRendering = true;
+    // Show current temperature
+    this.temperatureToArray();
+    ws281x.render(this.pixels);
+
+    setTimeout(() => {
+      this.busyRendering = false;
+    }, 1000 * onTime);
   },
   snapshotToPixels(snapshot, color) {
     for(var i = 0; i < snapshot.length; i++) {
@@ -389,6 +455,27 @@ const clock = {
     concatArray.forEach( element => {
       this.pixels[element] = color;
     })
+  },
+  temperatureToArray(temperature) {
+    this.clearPixels();
+    // Round
+    temperature = parseInt(temperature);
+
+    // get unit digit
+    var unitDigit = temperature % 10;
+
+    // get tens digit
+    var tensDigit = parseInt(temperature / 10);
+
+    var concatArray = [];
+
+    if (tensDigit == 0) {
+      
+    } else {
+
+    }
+
+
   }
 
 };
