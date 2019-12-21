@@ -1,14 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const router = express.Router();
-var wifiControl = require('wifi-control');
-var settings = {
-    debug: true,
-    iface: 'wlan1',
-    connectionTimeout: 10000 // in ms
-};
-wifiControl.configure( settings );
-
+var Wifi = require('rpi-wifi-connection');
+var wifi = new Wifi("wlan1");
 
 
 router.get('/', (req, res, next) => {
@@ -47,35 +41,36 @@ router.get('/connected-to-internet', (req, res, next) => {
 
 // TODO: check this
 router.get('/wifi-networks', (req, res, next) => {
-    new Promise((resolve, reject) => {
-        WiFiControl.scanForWiFi( function(err, response) {
-            if (err) reject(err);
-            resolve(response);
-          });
-    }).then( (response) => {
-        res.status(200).json(response);
-    }).catch(error => res.status(error))
+    wifi.scan().then((ssids) => {
+        res.status(200).json(ssids);
+    })
+    .catch((error) => {
+        res.status(error);
+    });
 });
 
 // TODO: check this
 router.get('/current-connection', (req, res, next) => {
-    res.status(200).json(wifiControl.getIfaceState());
+    wifi.getStatus().then((status) => {
+        res.status(200).json(status);
+    })
+    .catch((error) => {
+        res.status(error);
+    });    
 });
 
 // TODO: finish this
 router.post('/connect-to-wifi', (req, res, next) => {
-    // example data: { ssid: "nameOfWifiNetwork", password: "psswrdOfWifiNetwork"} Het kan dat er geen password is!!
+    // example data: { ssid: "nameOfWifiNetwork", psk: "psswrdOfWifiNetwork"} Het kan dat er geen password is!!
     var connectionData = JSON.parse(req.body);    // TODO: nodig om te parsen?
     console.log("Parsed: ", connectionData);
 
-    new Promise((resolve, reject) => {
-        WiFiControl.connectToAP( connectionData, function(err, response) {
-            if (err) reject(err);
-            resolve(response);
-        })
-    }).then( (response) => {
-        res.status(200).json(response);
-    }).catch(error => res.status(error))
+    wifi.connect(connectionData).then(() => {
+        res.status(200).json(true);
+    })
+    .catch((error) => {
+        res.status(200).json(false);
+    });
 });
 
 
