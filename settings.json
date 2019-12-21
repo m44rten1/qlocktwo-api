@@ -22,7 +22,7 @@
     },
     "brightness": {
         "auto": false,
-        "brightness": 9
+        "brightness": 50
     },
     "color": {
         "color": "#49F1D2"
