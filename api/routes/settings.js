@@ -3,6 +3,7 @@ const fs = require('fs');
 const router = express.Router();
 var Wifi = require('rpi-wifi-connection');
 var wifi = new Wifi("wlan1");
+const isOnline = require('is-online');
 
 
 router.get('/', (req, res, next) => {
@@ -30,13 +31,11 @@ router.get('/message', (req, res, next) => {
 
 // TODO: check this
 router.get('/connected-to-internet', (req, res, next) => {
-    require('dns').resolve('8.8.8.8', function(err) {
-        if (err) {
-            res.status(200).json(false)
-        } else {
-            res.status(200).json(true)
-        }
-    });
+    
+    isOnline().then(response => {
+        res.status(200).json(response)
+    }).catch(err => res.status(200).json(false));
+    
 });
 
 // TODO: check this
