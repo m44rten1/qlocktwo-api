@@ -116,7 +116,7 @@ const clock = {
       let settings = JSON.parse(rawdata);
 
       if(!settings.temperature.off) {
-        if(tick % (60 * settings.temperature.frequency)) {
+        if(tick % (60 * settings.temperature.frequency) == 0) {
           this.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
