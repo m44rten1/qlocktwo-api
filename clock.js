@@ -116,8 +116,8 @@ const clock = {
       let settings = JSON.parse(rawdata);
 
       if(!settings.temperature.off) {
-        if(tick % (60 * settings.temperature.frequency)){
-          //this.renderTemperature(settings.temperature.onTime);
+        if(tick % (60 * settings.temperature.frequency)) {
+          this.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
       
@@ -159,7 +159,6 @@ const clock = {
     });
   },
   renderTime() {
-    console.log("Busy rendering ", this.busyRendering);
     if(!this.busyRendering) {
       // Get settings
       let rawdata = fs.readFileSync("settings.json");
@@ -169,7 +168,6 @@ const clock = {
       var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
 
       this.timeToArray( hour, minutes, getColor(settings));
-      console.log(this.pixels);
       ws281x.render(this.pixels);
     }
   },
@@ -221,15 +219,19 @@ const clock = {
       }, parseInt(speed * 1000))
     }
   },
-  renderTemperature(onTime) {
-    this.busyRendering = true;
-    // Show current temperature
-    this.temperatureToArray();
-    ws281x.render(this.pixels);
-
-    setTimeout(() => {
-      this.busyRendering = false;
-    }, 1000 * onTime);
+  renderTemperature(onTime, color) {
+    if (!this.busyRendering) {
+      this.busyRendering = true;
+      // Show current temperature
+      this.clearPixels();
+      this.temperatureToArray();
+      this.pixels[10] = color;
+      ws281x.render(this.pixels);
+  
+      setTimeout(() => {
+        this.busyRendering = false;
+      }, 1000 * onTime);
+    }
   },
   snapshotToPixels(snapshot, color) {
     for(var i = 0; i < snapshot.length; i++) {
