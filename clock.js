@@ -5,6 +5,8 @@ const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
 
+var test = -9;
+
 tempFilter = new Array(150).fill(0);
 brightnessFilter = new Array(150).fill(0);
 
@@ -50,6 +52,7 @@ const clock = {
   },
   numbers: {
     minusSign: [5, 17, 26],
+    degreeSign: [111],
     singleDigit: [
         [74, 69, 54, 49, 48, 47, 46, 45, 44, 43, 60, 63, 80, 79, 78, 77, 76, 75], // 0
         [74, 75, 76, 77, 78, 79, 80], // 1
@@ -137,7 +140,7 @@ const clock = {
 
       // Temperatures
       if(!settings.temperature.off && tick > 100) {
-        if(tick % (60 * settings.temperature.frequency) == 0) {
+        if(tick % (2 * settings.temperature.frequency) == 0) {  // TODO: Change '2' to '60'
           that.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
@@ -477,6 +480,10 @@ const clock = {
     // Round
     temperature = parseInt(this.temperature);
 
+    // TODO: DELETE
+    temperature = test;
+    test ++;
+
     // get unit digit
     var unitDigit = Math.abs(parseInt(temperature % 10));
 
@@ -495,6 +502,9 @@ const clock = {
     } else {
       concatArray = [...this.numbers.doubleDigitUnits[unitDigit], ...this.numbers.doubleDigitTens[tensDigit - 1]];
     }
+
+    // Degree sign
+    concatArray = [...concatArray, ...this.numbers.degreeSign];
 
     // Set pixels
     concatArray.forEach( element => {
