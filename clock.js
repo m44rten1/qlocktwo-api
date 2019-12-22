@@ -101,22 +101,25 @@ const clock = {
   init() {
     this.raster = this.buildAddressRaster();
     this.initLeds();
+    this.updateSettings();
     this.measurements();
     this.clockControl();
+  },
+  updateSettings() {
+
   },
   clockControl() {
     // Init
     let tick = 0;
     var that = this;
 
-    // Get settings
-    let rawdata = fs.readFileSync("settings.json");
-    let settings = JSON.parse(rawdata);
-
     // Render every second
     setInterval(() => {
+      // Get settings
+      let rawdata = fs.readFileSync("settings.json");
+      let settings = JSON.parse(rawdata);
+
       // Calculate output Brightness
-      console.log(settings.brightness.auto);
       if (settings.brightness.auto) {
         that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
         if (that.outputBrightness > 75) {
