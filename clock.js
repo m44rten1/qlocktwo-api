@@ -106,10 +106,18 @@ const clock = {
   },
   clockControl() {
     let tick = 0;
+    var that = this;
     // Render every second
     setInterval(() => {
+      // Calculate output Brightness
+      if (settings.brightness.auto) {
+        that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
+      } else {
+        that.outputBrightness = settings.brightness.brightness;
+      }
+
       // Times
-      this.renderTime();
+      that.renderTime();
 
       // Temperatures
       // Get settings
@@ -118,16 +126,11 @@ const clock = {
 
       if(!settings.temperature.off && tick > 300) {
         if(tick % (60 * settings.temperature.frequency) == 0) {
-          this.renderTemperature(settings.temperature.onTime, getColor(settings));
+          that.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
 
-      // Calculate output Brightness
-      if (settings.brightness.auto) {
-        this.outputBrightness = parseInt((-5 * this.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
-      } else {
-        this.outputBrightness = settings.brightness.brightness;
-      }
+      
 
 
 
