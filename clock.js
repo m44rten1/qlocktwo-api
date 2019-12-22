@@ -201,7 +201,7 @@ const clock = {
     var color = getColor(settings);
     var that = this;
     var spaceBetweenLetters = 1;
-    var spaceBetweenWords = 4;
+    var spaceBetweenWords = 6;
     var indexLength = 0;
     text.split("").forEach(character => {
       if(character == " ") {
