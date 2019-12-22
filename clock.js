@@ -108,7 +108,7 @@ const clock = {
     // Init
     let tick = 0;
     var that = this;
-    
+
     // Get settings
     let rawdata = fs.readFileSync("settings.json");
     let settings = JSON.parse(rawdata);
@@ -116,6 +116,7 @@ const clock = {
     // Render every second
     setInterval(() => {
       // Calculate output Brightness
+      console.log(settings.brightness.auto);
       if (settings.brightness.auto) {
         that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
         if (that.outputBrightness > 75) {
