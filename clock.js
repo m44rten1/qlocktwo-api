@@ -136,7 +136,7 @@ const clock = {
       that.renderTime();
 
       // Temperatures
-      if(!settings.temperature.off && tick > 300) {
+      if(!settings.temperature.off && tick > 100) {
         if(tick % (60 * settings.temperature.frequency) == 0) {
           that.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
