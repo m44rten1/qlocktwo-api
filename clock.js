@@ -193,16 +193,11 @@ const clock = {
       }
     });
 
-
-    // Calculate total index diff
-
-    console.log("PRE SET TIMEOUT")
     var startIndex = 11;
     displayText(startIndex);
 
     function displayText(index) { 
       setTimeout(function () {
-        console.log("IN SET TIMEOUT FUNCTION") 
         that.clearPixels();
         var snapshot = that.createEmptySnapshotArray();
         snapshot = that.addLetters(snapshot, index, text, spaceBetweenLetters, spaceBetweenWords);
@@ -473,12 +468,15 @@ const clock = {
     var concatArray = [];
 
     if (tensDigit == 0) {
-
+      concatArray = this.numbers.singleDigit[unitDigit];
     } else {
-
+      concatArray = this.numbers.singleDigit[unitDigit];
     }
 
-
+    // Set pixels
+    concatArray.forEach( element => {
+      this.pixels[element] = color;
+    })
   }
 
 };
