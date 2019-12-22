@@ -519,7 +519,7 @@ var getColor = function(settings) {
   console.log("1: ", settings.color.color);
   color = convert.hex.hsv.raw(settings.color.color.substr(1, 6));
   console.log("2: ", color);
-  color[0] = parseInt(clock.outputBrightness);
+  color[2] = parseInt(clock.outputBrightness);
   console.log("3: ",color);
   color = convert.hsv.hex(color);
   console.log("4: ", color);
