@@ -5,8 +5,6 @@ const convert = require("color-convert");
 const mcpadc = require("mcp-spi-adc");
 const moment = require("moment-timezone");
 
-var test = -9;
-
 tempFilter = new Array(150).fill(0);
 brightnessFilter = new Array(150).fill(0);
 
@@ -144,11 +142,11 @@ const clock = {
       }
 
       // Times
-      //that.renderTime();  // TODO: uncomment!
+      that.renderTime();
 
       // Temperatures
-      if(!settings.temperature.off ) { // TODO:  && tick > 500
-        if(tick % (2 * settings.temperature.frequency) == 0) {  // TODO: Change '2' to '60'
+      if(!settings.temperature.off && tick > 500) {
+        if(tick % (60 * settings.temperature.frequency) == 0) {
           that.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
@@ -490,10 +488,6 @@ const clock = {
 
     if (temperature < -9) temperature = -9;
     if (temperature > 50) temperature = 50;
-
-    // TODO: DELETE
-    temperature = test;
-    test ++;
 
     // get unit digit
     var unitDigit = Math.abs(parseInt(temperature % 10));
