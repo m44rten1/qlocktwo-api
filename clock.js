@@ -145,14 +145,14 @@ const clock = {
       that.renderTime();
 
       // Temperatures
-      if(!settings.temperature.off && tick > 500) {
-        if(tick % (60 * settings.temperature.frequency) == 0) {
+      if(!settings.temperature.off && tick > 500 * 4) {
+        if(tick % (60 * 4 * settings.temperature.frequency) == 0) {
           that.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
 
       tick++;
-    }, 1000); // Must be 1000 ms!
+    }, 250); // Must be 1000 ms!
 
 
   },
