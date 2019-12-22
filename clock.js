@@ -523,7 +523,6 @@ var getColor = function(settings) {
   color = convert.hex.hsv.raw(settings.color.color.substr(1, 6));
   color[2] = parseInt(clock.outputBrightness);
   color = convert.hsv.hex(color);
-  var result = parseInt(color, 16);
   return parseInt(color, 16);
 };
 
