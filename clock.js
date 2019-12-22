@@ -459,7 +459,7 @@ const clock = {
     // Round
     temperature = parseInt(this.temperature);
     //TODO: remove this test
-    this.temperature = -6;
+    temperature = -6;
 
     // get unit digit
     var unitDigit = Math.abs(parseInt(temperature % 10));
