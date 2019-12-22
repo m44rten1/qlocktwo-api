@@ -505,12 +505,23 @@ const clock = {
 };
 
 var getColor = function(settings) {
+  // console.log("1: ", settings.color.color);
+  // color = convert.hex.lab.raw(settings.color.color.substr(1, 6));
+  // console.log("2: ", color);
+  // color[0] = parseInt(clock.outputBrightness);
+  // console.log("3: ",color);
+  // color = convert.lab.hex(color);
+  // console.log("4: ", color);
+  // var result = parseInt(color, 16);
+  // console.log("5: ", result);
+  // return parseInt(color, 16);
+
   console.log("1: ", settings.color.color);
-  color = convert.hex.lab.raw(settings.color.color.substr(1, 6));
+  color = convert.hex.lch.raw(settings.color.color.substr(1, 6));
   console.log("2: ", color);
   color[0] = parseInt(clock.outputBrightness);
   console.log("3: ",color);
-  color = convert.lab.hex(color);
+  color = convert.lch.hex(color);
   console.log("4: ", color);
   var result = parseInt(color, 16);
   console.log("5: ", result);
