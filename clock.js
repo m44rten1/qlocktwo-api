@@ -156,7 +156,7 @@ const clock = {
           if (err) throw err;
           tempFilter.shift();
           tempFilter.push((reading.value * 5 - 0.5) * 100);
-          var temperature = average(tempFilter) - 54;
+          var temperature = 0.74713 * (average(tempFilter) - 54) + 7.77356;
           this.temperature = temperature; // (14.0 / 16.1) * (temperature - 60.0) + 8.0;  // Temperature conversion based on two measuring points
         });
       }, 200);
