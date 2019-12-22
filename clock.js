@@ -517,11 +517,11 @@ var getColor = function(settings) {
   // return parseInt(color, 16);
 
   console.log("1: ", settings.color.color);
-  color = convert.hex.lch.raw(settings.color.color.substr(1, 6));
+  color = convert.hex.hsv.raw(settings.color.color.substr(1, 6));
   console.log("2: ", color);
   color[0] = parseInt(clock.outputBrightness);
   console.log("3: ",color);
-  color = convert.lch.hex(color);
+  color = convert.hsv.hex(color);
   console.log("4: ", color);
   var result = parseInt(color, 16);
   console.log("5: ", result);
