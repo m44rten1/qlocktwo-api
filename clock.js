@@ -136,10 +136,6 @@ const clock = {
         }
       }
 
-      
-
-
-
       tick++;
     }, 1000); // Must be 1000 ms!
 
