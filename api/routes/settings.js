@@ -28,7 +28,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/message', (req, res, next) => {
-    res.status(200).json(global.clock.renderText(req.query.message, 0.08));
+    res.status(200).json(global.clock.renderText(req.query.message, 0.13));
 });
 
 // TODO: check this
