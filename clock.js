@@ -117,7 +117,7 @@ const clock = {
 
       if(!settings.temperature.off) {
         if(tick % (60 * settings.temperature.frequency)){
-          this.renderTemperature(settings.temperature.onTime);
+          //this.renderTemperature(settings.temperature.onTime);
         }
       }
       
