@@ -105,8 +105,14 @@ const clock = {
     this.clockControl();
   },
   clockControl() {
+    // Init
     let tick = 0;
     var that = this;
+    
+    // Get settings
+    let rawdata = fs.readFileSync("settings.json");
+    let settings = JSON.parse(rawdata);
+
     // Render every second
     setInterval(() => {
       // Calculate output Brightness
@@ -126,10 +132,6 @@ const clock = {
       that.renderTime();
 
       // Temperatures
-      // Get settings
-      let rawdata = fs.readFileSync("settings.json");
-      let settings = JSON.parse(rawdata);
-
       if(!settings.temperature.off && tick > 300) {
         if(tick % (60 * settings.temperature.frequency) == 0) {
           that.renderTemperature(settings.temperature.onTime, getColor(settings));
