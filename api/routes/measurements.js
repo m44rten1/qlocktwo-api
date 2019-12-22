@@ -7,7 +7,7 @@ router.get('/temperature', (req, res, next) => {
 });
 
 router.get('/brightness', (req, res, next) => {
-    res.status(200).json(global.clock.brightness)
+    res.status(200).json(global.clock.measuredBrightness)
 });
 
 module.exports = router;
