@@ -472,7 +472,7 @@ const clock = {
     if (tensDigit == 0) {
       concatArray = this.numbers.singleDigit[unitDigit];
 
-      if (this.temperature < 0) {
+      if (temperature < 0) {
         concatArray = [...concatArray, ...this.numbers.minusSign];
       }
       
