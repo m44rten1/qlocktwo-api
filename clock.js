@@ -460,7 +460,7 @@ const clock = {
     temperature = parseInt(this.temperature);
 
     // get unit digit
-    var unitDigit = temperature % 10;
+    var unitDigit = parseInt(temperature % 10);
 
     // get tens digit
     var tensDigit = parseInt(temperature / 10);
@@ -470,8 +470,7 @@ const clock = {
     if (tensDigit == 0) {
       concatArray = this.numbers.singleDigit[unitDigit];
     } else {
-      concatArray = this.numbers.doubleDigitUnits[unitDigit];
-      concatArray = [...concatArray, ...this.numbers.doubleDigitTens[tensDigit - 1]];
+      concatArray = [...this.numbers.doubleDigitUnits[unitDigit], ...this.numbers.doubleDigitTens[tensDigit - 1]];
     }
 
     // Set pixels
