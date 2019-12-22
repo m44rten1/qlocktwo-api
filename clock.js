@@ -124,7 +124,7 @@ const clock = {
       // Brightness
       if (settings.brightness.auto) {
 
-        settings.brightness.brightness = 100;//this.brightness;
+        settings.brightness.brightness = this.brightness;
 
         fs.writeFile('settings.json', JSON.stringify(settings), function (err) {
           if (err) throw err;
