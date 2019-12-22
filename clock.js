@@ -169,6 +169,7 @@ const clock = {
       var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
 
       this.timeToArray( hour, minutes, getColor(settings));
+      console.log(this.pixels);
       ws281x.render(this.pixels);
     }
   },
