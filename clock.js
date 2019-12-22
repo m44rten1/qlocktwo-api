@@ -470,7 +470,8 @@ const clock = {
     if (tensDigit == 0) {
       concatArray = this.numbers.singleDigit[unitDigit];
     } else {
-      concatArray = this.numbers.singleDigit[unitDigit];
+      concatArray = this.numbers.doubleDigitUnits[unitDigit];
+      concatArray = [...this.numbers.doubleDigitTens[tensDigit]];
     }
 
     // Set pixels
