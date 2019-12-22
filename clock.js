@@ -126,9 +126,7 @@ const clock = {
 
         settings.brightness.brightness = this.brightness;
 
-        fs.writeFile('settings.json', JSON.stringify(settings), function (err) {
-          if (err) throw err;
-        });
+        fs.writeFileSync('settings.json', JSON.stringify(settings));
       }
 
       tick++;
