@@ -115,14 +115,21 @@ const clock = {
       let rawdata = fs.readFileSync("settings.json");
       let settings = JSON.parse(rawdata);
 
-      if(!settings.temperature.off) {
+      if(!settings.temperature.off && tick > 300) {
         if(tick % (60 * settings.temperature.frequency) == 0) {
           this.renderTemperature(settings.temperature.onTime, getColor(settings));
         }
       }
-      
 
+      // Brightness
+      if (settings.brightness.auto) {
 
+        settings.brightness.brightness = this.brightness;
+
+        fs.writeFile('settings.json', settings, function (err) {
+          if (err) throw err;
+        });
+      }
 
       tick++;
     }, 1000); // Must be 1000 ms!
