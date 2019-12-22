@@ -14,7 +14,7 @@ const clock = {
   raster: null, // Led map raster: led-indexes in a 11 x 10 array
   busyRendering: false, // Other functions will only render if this variable is false
   config: {},
-  brightness: 0,
+  measuredBrightness: 0,
   temperature: 0,
   ledArrayInterface: {
     hours: [
@@ -121,13 +121,14 @@ const clock = {
         }
       }
 
-      // Brightness
-      // if (settings.brightness.auto) {
+      // Calculate output Brightness
+      if (settings.brightness.auto) {
+        this.outputBrightness = parseInt((-5 * this.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
+      } else {
+        this.outputBrightness = settings.brightness.brightness;
+      }
 
-      //   settings.brightness.brightness = this.brightness;
-
-      //   fs.writeFileSync('settings.json', JSON.stringify(settings));
-      // }
+      
 
       tick++;
     }, 1000); // Must be 1000 ms!
@@ -158,7 +159,7 @@ const clock = {
             
           brightnessFilter.shift();
           brightnessFilter.push(reading.value * 100);
-          this.brightness = average(brightnessFilter);
+          this.measuredBrightness = average(brightnessFilter);
         });
       }, 200);
     });
@@ -493,7 +494,7 @@ const clock = {
 
 var getColor = function(settings) {
   color = convert.hex.lab.raw(settings.color.color.substr(1, 6));
-  color[0] = parseInt(settings.brightness.brightness);
+  color[0] = parseInt(this.outputBrightness);
   color = convert.lab.hex(color);
   return parseInt(color, 16);
 };
