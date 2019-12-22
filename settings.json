@@ -25,7 +25,7 @@
         "brightness": 50
     },
     "color": {
-        "color": "#FFFFFF"
+        "color": "#FFF1FF"
     },
     "wifi": {
         "network": "GuestNetwork",

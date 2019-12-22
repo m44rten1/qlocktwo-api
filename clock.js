@@ -122,12 +122,12 @@ const clock = {
       }
 
       // Brightness
-      if (settings.brightness.auto) {
+      // if (settings.brightness.auto) {
 
-        settings.brightness.brightness = this.brightness;
+      //   settings.brightness.brightness = this.brightness;
 
-        fs.writeFileSync('settings.json', JSON.stringify(settings));
-      }
+      //   fs.writeFileSync('settings.json', JSON.stringify(settings));
+      // }
 
       tick++;
     }, 1000); // Must be 1000 ms!
