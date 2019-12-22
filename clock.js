@@ -470,6 +470,7 @@ const clock = {
     if (tensDigit == 0) {
       concatArray = this.numbers.singleDigit[unitDigit];
     } else {
+      console.log(tensDigit);
       concatArray = this.numbers.doubleDigitTens[tensDigit - 1]; //[...this.numbers.doubleDigitUnits[unitDigit], ...this.numbers.doubleDigitTens[tensDigit - 1]];
     }
 
