@@ -156,7 +156,7 @@ const clock = {
           if (err) throw err;
           tempFilter.shift();
           tempFilter.push((reading.value * 5 - 0.5) * 100);
-          var temperature = 0.74713 * (average(tempFilter) - 54) + 7.77356;
+          var temperature = 0.74713 * (average(tempFilter.filter(temp => temp != 0)) - 54) + 7.77356;
           this.temperature = temperature; // (14.0 / 16.1) * (temperature - 60.0) + 8.0;  // Temperature conversion based on two measuring points
         });
       }, 200);
@@ -505,26 +505,10 @@ const clock = {
 };
 
 var getColor = function(settings) {
-  // console.log("1: ", settings.color.color);
-  // color = convert.hex.lab.raw(settings.color.color.substr(1, 6));
-  // console.log("2: ", color);
-  // color[0] = parseInt(clock.outputBrightness);
-  // console.log("3: ",color);
-  // color = convert.lab.hex(color);
-  // console.log("4: ", color);
-  // var result = parseInt(color, 16);
-  // console.log("5: ", result);
-  // return parseInt(color, 16);
-
-  console.log("1: ", settings.color.color);
   color = convert.hex.hsv.raw(settings.color.color.substr(1, 6));
-  console.log("2: ", color);
   color[2] = parseInt(clock.outputBrightness);
-  console.log("3: ",color);
   color = convert.hsv.hex(color);
-  console.log("4: ", color);
   var result = parseInt(color, 16);
-  console.log("5: ", result);
   return parseInt(color, 16);
 };
 
