@@ -139,7 +139,7 @@ const clock = {
           tempFilter.shift();
           tempFilter.push((reading.value * 5 - 0.5) * 100);
           var temperature = average(tempFilter) - 54;
-          this.temperature = (14.0 / 16.1) * (temperature - 60.0) + 8.0;  // Temperature conversion based on two measuring points
+          this.temperature = temperature; // (14.0 / 16.1) * (temperature - 60.0) + 8.0;  // Temperature conversion based on two measuring points
         });
       }, 200);
     });
@@ -224,8 +224,7 @@ const clock = {
       this.busyRendering = true;
       // Show current temperature
       this.clearPixels();
-      this.temperatureToArray();
-      this.pixels[10] = color;
+      this.temperatureToArray(color);
       ws281x.render(this.pixels);
   
       setTimeout(() => {
@@ -460,10 +459,10 @@ const clock = {
       this.pixels[element] = color;
     })
   },
-  temperatureToArray(temperature) {
+  temperatureToArray(color) {
     this.clearPixels();
     // Round
-    temperature = parseInt(temperature);
+    temperature = parseInt(this.temperature);
 
     // get unit digit
     var unitDigit = temperature % 10;
