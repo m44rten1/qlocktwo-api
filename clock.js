@@ -107,7 +107,6 @@ const clock = {
     let tick = 0;
     // Render every second
     setInterval(() => {
-      console.log("Tick!");
       // Times
       this.renderTime();
 
@@ -160,6 +159,7 @@ const clock = {
     });
   },
   renderTime() {
+    console.log("Busy rendering ", this.busyRendering);
     if(!this.busyRendering) {
       // Get settings
       let rawdata = fs.readFileSync("settings.json");
