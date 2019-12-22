@@ -112,6 +112,12 @@ const clock = {
       // Calculate output Brightness
       if (settings.brightness.auto) {
         that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
+        if (that.outputBrightness > 75) {
+          that.outputBrightness = 75;
+
+        } else if(that.outputBrightness <= 20) {
+          that.outputBrightness = 20;
+        }
       } else {
         that.outputBrightness = settings.brightness.brightness;
       }
