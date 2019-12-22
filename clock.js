@@ -15,6 +15,7 @@ const clock = {
   busyRendering: false, // Other functions will only render if this variable is false
   config: {},
   measuredBrightness: 0,
+  outputBrightness: 0,
   temperature: 0,
   ledArrayInterface: {
     hours: [
@@ -128,7 +129,7 @@ const clock = {
         this.outputBrightness = settings.brightness.brightness;
       }
 
-      
+
 
       tick++;
     }, 1000); // Must be 1000 ms!
