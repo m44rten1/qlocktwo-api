@@ -14,9 +14,9 @@ const clock = {
   raster: null, // Led map raster: led-indexes in a 11 x 10 array
   busyRendering: false, // Other functions will only render if this variable is false
   config: {},
-  measuredBrightness: 0,
-  outputBrightness: 0,
-  temperature: 0,
+  measuredBrightness: 50,
+  outputBrightness: 50,
+  temperature: 20,
   ledArrayInterface: {
     hours: [
       [63, 80, 83, 100, 104],  // ZWOELF, NULL
@@ -500,7 +500,7 @@ const clock = {
 
 var getColor = function(settings) {
   color = convert.hex.lab.raw(settings.color.color.substr(1, 6));
-  color[0] = parseInt(this.outputBrightness);
+  color[0] = parseInt(clock.outputBrightness);
   color = convert.lab.hex(color);
   return parseInt(color, 16);
 };
