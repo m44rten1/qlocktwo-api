@@ -14,8 +14,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    console.log(req.body);
     fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
         if (err) throw err;
+        
 
         let rawdata = fs.readFileSync('settings.json');
         let settings = JSON.parse(rawdata);
