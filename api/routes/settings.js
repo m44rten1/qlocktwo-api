@@ -8,23 +8,33 @@ const isOnline = require('is-online');
 
 router.get('/', (req, res, next) => {
     let rawdata = fs.readFileSync('settings.json');
-    let settings = JSON.parse(rawdata);
-
-    res.status(200).json(settings)
+    try {
+        let settings = JSON.parse(rawdata);
+        res.status(200).json(settings)
+    } catch(err) {
+        console.log(err);
+        res.status(err);
+    }
 });
 
 router.post('/', (req, res, next) => {
-    console.log(req.body);
-    fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
-        if (err) throw err;
-        
+    try {
+        fs.writeFile('settings.json', JSON.stringify(req.body), function (err) {
+            if (err) throw err;
+            
+    
+            let rawdata = fs.readFileSync('settings.json');
+            let settings = JSON.parse(rawdata);
+    
+            res.status(200).json(settings)
+            global.clock.renderTime();
+        });
 
-        let rawdata = fs.readFileSync('settings.json');
-        let settings = JSON.parse(rawdata);
-
-        res.status(200).json(settings)
-        global.clock.renderTime();
-    });
+    } catch(err) {
+        console.log(err);
+        res.status(err);
+    }
+    
 });
 
 router.get('/message', (req, res, next) => {
