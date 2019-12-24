@@ -126,32 +126,38 @@ const clock = {
     setInterval(() => {
       // Get settings
       let rawdata = fs.readFileSync("settings.json");
-      let settings = JSON.parse(rawdata);
+      try {
+        let settings = JSON.parse(rawdata);
 
-      // Calculate output Brightness
-      if (settings.brightness.auto) {
-        that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
-        if (that.outputBrightness > 75) {
-          that.outputBrightness = 75;
+        // Calculate output Brightness
+        if (settings.brightness.auto) {
+          that.outputBrightness = parseInt((-5 * that.measuredBrightness + 560) / 3);   // TODO: Check with Kirsten for better formula
+          if (that.outputBrightness > 75) {
+            that.outputBrightness = 75;
 
-        } else if(that.outputBrightness <= 20) {
-          that.outputBrightness = 20;
+          } else if(that.outputBrightness <= 20) {
+            that.outputBrightness = 20;
+          }
+        } else {
+          that.outputBrightness = settings.brightness.brightness;
         }
-      } else {
-        that.outputBrightness = settings.brightness.brightness;
-      }
 
-      // Times
-      that.renderTime();
+        // Times
+        that.renderTime();
 
-      // Temperatures
-      if(!settings.temperature.off && tick > 500 * 4) {
-        if(tick % (60 * 4 * settings.temperature.frequency) == 0) {
-          that.renderTemperature(settings.temperature.onTime, getColor(settings));
+        // Temperatures
+        if(!settings.temperature.off && tick > 500 * 4) {
+          if(tick % (60 * 4 * settings.temperature.frequency) == 0) {
+            that.renderTemperature(settings.temperature.onTime, getColor(settings));
+          }
         }
-      }
 
-      tick++;
+        tick++;
+
+      } catch(err) {
+        console.log(err);
+      }
+      
     }, 250); // Must be 1000 ms!
 
 
@@ -189,7 +195,14 @@ const clock = {
     if(!this.busyRendering) {
       // Get settings
       let rawdata = fs.readFileSync("settings.json");
-      let settings = JSON.parse(rawdata);
+      let settings = {};
+      try {
+        settings = JSON.parse(rawdata);
+      } catch(err) {
+        console.log(err);
+        return;
+      }
+      
 
       var minutes = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(14, 2));
       var hour = parseInt(moment().tz(settings.time.timezone.utc[0]).format().substr(11, 2));
@@ -206,7 +219,14 @@ const clock = {
 
     // Get settings
     let rawdata = fs.readFileSync("settings.json");
-    let settings = JSON.parse(rawdata);
+    let settings = {};
+    try {
+      settings = JSON.parse(rawdata);
+    } catch(err) {
+      console.log(err);
+      return;
+    }
+    
     var color = getColor(settings);
     var that = this;
     var spaceBetweenLetters = 1;
