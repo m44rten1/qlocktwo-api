@@ -25,10 +25,16 @@
         "brightness": 50
     },
     "color": {
-        "color": "#FFF1FF"
+        "color": "#FFFFFF"
     },
     "wifi": {
         "network": "GuestNetwork",
         "password": "dhfxcsqfdqsdf"
     }
 }
+
+100% br => 20% LED
+
+92% br =>  40% LED
+
+70% br => 70% LED
